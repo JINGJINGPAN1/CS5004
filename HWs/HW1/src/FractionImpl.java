@@ -1,13 +1,14 @@
 public class FractionImpl implements Fraction {
+
   private int numerator;
   private int denominator;
 
   /**
-   * Constructs a fraction with the specified numerator and denominator.
-   * The denominator must not be zero. If the denominator is negative, the numerator's sign is adjusted
-   * to ensure the denominator is positive.
+   * Constructs a fraction with the specified numerator and denominator. The denominator must not be
+   * zero. If the denominator is negative, the numerator's sign is adjusted to ensure the
+   * denominator is positive.
    *
-   * @param numerator the numerator of the fraction
+   * @param numerator   the numerator of the fraction
    * @param denominator the denominator of the fraction (must not be zero)
    * @throws IllegalArgumentException if the denominator is zero
    */
@@ -18,6 +19,7 @@ public class FractionImpl implements Fraction {
       throw new IllegalArgumentException("Cannot divide by zero");
     }
   }
+
   /**
    * returns the numerator of the fraction
    *
@@ -66,7 +68,7 @@ public class FractionImpl implements Fraction {
     if (denominator < 0) {
       this.numerator *= -1;
       this.denominator *= -1;
-    }else{
+    } else {
       this.denominator = denominator;
     }
 
@@ -128,11 +130,19 @@ public class FractionImpl implements Fraction {
     return Double.compare(this.toDouble(), other.toDouble());
   }
 
+  /**
+   * Returns a string representation of the fraction in its simplified form.
+   * The fraction is simplified by dividing both the numerator and denominator
+   * by their greatest common divisor (GCD). If the denominator is negative,
+   * the sign is moved to the numerator to ensure the denominator is always positive.
+   *
+   * @return A string representation of the simplified fraction in the format "numerator/denominator".
+   */
   public String toString() {
     int gcd = gcd(numerator, denominator);
     int simplifiedNumerator = numerator / gcd;
     int simplifiedDenominator = denominator / gcd;
-    if(simplifiedDenominator < 0){
+    if (simplifiedDenominator < 0) {
       simplifiedDenominator *= -1;
       simplifiedNumerator *= -1;
     }
@@ -140,8 +150,17 @@ public class FractionImpl implements Fraction {
 
   }
 
+  /**
+   * Computes the greatest common divisor (GCD) of two integers using the Euclidean algorithm.
+   * The GCD is the largest positive integer that divides both numbers without leaving a remainder.
+   *
+   * @param a The first integer.
+   * @param b The second integer.
+   * @return The greatest common divisor of the two integers.
+   */
+
   public int gcd(int a, int b) {
-    if(b == 0){
+    if (b == 0) {
       return a;
     }
     return gcd(b, a % b);

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class FractionImplTest {
+
   private FractionImpl fraction1;
   private FractionImpl fraction2;
   private FractionImpl fraction3;
