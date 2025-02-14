@@ -21,7 +21,6 @@ public class EmptyNode implements IListOfBooks{
    *
    * @return the total price of books in the list, which is 0 for an empty node.
    */
-
   @Override
   public float totalPrice() {
     return 0;
@@ -34,10 +33,9 @@ public class EmptyNode implements IListOfBooks{
    * @param year the year before which all the returned books are published.
    * @return an empty node, as there are no books to filter.
    */
-
   @Override
   public IListOfBooks allBefore(int year) {
-    return this;
+    return new EmptyNode();
   }
 
   /**
@@ -47,7 +45,6 @@ public class EmptyNode implements IListOfBooks{
    * @param book an instance of Class Book to add to the list.
    * @return a new ElementNode containing the provided book and this empty node as the next node.
    */
-
   @Override
   public IListOfBooks addAtEnd(Book book) {
     return new ElementNode(book, this);
