@@ -31,9 +31,9 @@ public class NewShoe {
   public String toString() {
     String str = "Shoe Details:\n";
     int size = getShoeSize();
-    String brandName = getBrandName(brand);
-    String colorName = getColorName(color);
-    String typeName = getShoeType(shoeType);
+    String brandName = getBrandName();
+    String colorName = getColorName();
+    String typeName = getShoeTypeName();
 
     str += "Size: " + size + "\n";
     str += "Brand: " + brandName + "\n";
@@ -43,8 +43,8 @@ public class NewShoe {
     return str;
   }
 
-  private String getBrandName(Brand brand) {
-    switch (brand) {
+  private String getBrandName() {
+    switch (this.brand) {
       case NIKE:
         return "Nike";
       case ADIDAS:
@@ -58,8 +58,8 @@ public class NewShoe {
     }
   }
 
-  public String getShoeType(Type shoeType) {
-    switch (shoeType) {
+  public String getShoeTypeName() {
+    switch (this.shoeType) {
       case BOOT:
         return "Boot";
       case DRESS:
@@ -74,8 +74,8 @@ public class NewShoe {
   }
 
 
-  private String getColorName(Color color) {
-    switch (color) {
+  private String getColorName() {
+    switch (this.color) {
       case RED:
       case GREEN:
       case YELLOW:
