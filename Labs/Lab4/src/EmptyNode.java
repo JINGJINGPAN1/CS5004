@@ -4,8 +4,6 @@
  * An empty node contains no data and represents the end of the list.
  */
 public class EmptyNode implements IListOfBooks{
-
-
   /**
    * Returns the count of books in the list.
    * Since this is an empty node, the count is always 0.
