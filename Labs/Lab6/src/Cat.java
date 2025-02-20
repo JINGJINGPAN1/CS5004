@@ -1,9 +1,24 @@
+import java.util.Objects;
+
+/**
+ * The Cat class represents a cat with attributes such as name, age, color, and owner.
+ * It provides getter and setter methods, a custom toString representation,
+ * and overridden equals and hashCode methods for object comparison and hashing.
+ */
 public class Cat {
   private String name;
   private int age;
   private Color color;
   private Person owner;
 
+  /**
+   * Constructs a Cat object with the specified attributes.
+   *
+   * @param name  the name of the cat
+   * @param age   the age of the cat
+   * @param color the color of the cat as a Color enum
+   * @param owner the owner of the cat as a Person object
+   */
   public Cat(String name, int age, Color color, Person owner) {
     this.name = name;
     this.age = age;
@@ -11,50 +26,80 @@ public class Cat {
     this.owner = owner;
   }
 
+  /**
+   * Gets the cat's name.
+   *
+   * @return the name of the cat
+   */
   public String getName() {
     return name;
   }
 
+  /**
+   * Gets the cat's age.
+   *
+   * @return the age of the cat
+   */
   public int getAge() {
     return age;
   }
 
+  /**
+   * Sets the cat's age.
+   *
+   * @param age the new age of the cat
+   */
   public void setAge(int age) {
     this.age = age;
   }
 
+  /**
+   * Gets the color of the cat.
+   *
+   * @return the color of the cat as a Color enum
+   */
   public Color getColor() {
     return color;
   }
 
-
+  /**
+   * Gets the cat's owner.
+   *
+   * @return the owner of the cat
+   */
   public Person getOwner() {
     return owner;
   }
 
+  /**
+   * Sets the cat's owner.
+   *
+   * @param owner the new owner of the cat
+   */
   public void setOwner(Person owner) {
     this.owner = owner;
   }
 
-
+  /**
+   * Returns a string representation of the Cat object, including all attributes.
+   *
+   * @return a formatted string with the cat's details
+   */
+  @Override
   public String toString() {
     String str = "Cat Details:\n";
-    String name = getName();
-    String age = getAge() + "";
-    String color = getColorName();
-    String ownerFirstName = getOwner().getFirstName();
-    String ownerLastName = getOwner().getLastName();
-    String ownerName = ownerFirstName + " " + ownerLastName;
-
-    str += "Name: " + name + "\n";
-    str += "Age: " + age + "\n";
-    str += "Color: " + color + "\n";
-    str += "Type: " + ownerName;
-
+    str += "Name: " + getName() + "\n";
+    str += "Age: " + getAge() + "\n";
+    str += "Color: " + getColorName() + "\n";
+    str += "Owner: " + getOwner().getFirstName() + " " + getOwner().getLastName();
     return str;
-
   }
 
+  /**
+   * Converts the color enum to a descriptive string.
+   *
+   * @return the color category as a string (e.g., "Primary", "Pastel", "Neutral")
+   */
   private String getColorName() {
     switch (this.color) {
       case RED:
@@ -67,21 +112,35 @@ public class Cat {
     }
   }
 
-  public boolean equals(Cat otherCat) {
-    if(this == otherCat){
+  /**
+   * Checks if this Cat object is equal to another object.
+   * Compares all fields for equality.
+   *
+   * @param o the object to compare with
+   * @return true if the objects are equal, false otherwise
+   */
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
       return true;
     }
-
-    if(otherCat == null){
+    if (o == null || !(o instanceof Cat)) {
       return false;
     }
-
-    if(!(otherCat instanceof Cat)){
-      return false;
-    }
-
-    return this.name.equals(otherCat.getName()) && this.age == otherCat.getAge()
-            && this.color == otherCat.getColor() && this.owner == otherCat.getOwner();
+    Cat cat = (Cat) o;
+    return Objects.equals(this.name, cat.name)
+        && this.age == cat.age
+        && this.color == cat.color
+        && Objects.equals(this.owner, cat.owner);
   }
 
+  /**
+   * Generates a hash code for the Cat object based on its fields.
+   *
+   * @return the hash code of the Cat object
+   */
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, age, color, owner);
+  }
 }
