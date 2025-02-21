@@ -90,26 +90,19 @@ public class Cat {
     String str = "Cat Details:\n";
     str += "Name: " + getName() + "\n";
     str += "Age: " + getAge() + "\n";
-    str += "Color: " + getColorName() + "\n";
-    str += "Owner: " + getOwner().getFirstName() + " " + getOwner().getLastName();
-    return str;
-  }
-
-  /**
-   * Converts the color enum to a descriptive string.
-   *
-   * @return the color category as a string (e.g., "Primary", "Pastel", "Neutral")
-   */
-  private String getColorName() {
     switch (this.color) {
       case RED:
       case YELLOW:
-        return "Primary";
+        str += "Color: Primary" + "\n";
+        break;
       case ORANGE:
-        return "Pastel";
+        str += "Color: Pastel" + "\n";
+        break;
       default:
-        return "Neutral";
+        str += "Color: Neutral" + "\n";
     }
+    str += "Owner: " + getOwner().getFirstName() + " " + getOwner().getLastName();
+    return str;
   }
 
   /**
@@ -128,10 +121,10 @@ public class Cat {
       return false;
     }
     Cat cat = (Cat) o;
-    return Objects.equals(this.name, cat.name)
+    return this.name == cat.name
         && this.age == cat.age
         && this.color == cat.color
-        && Objects.equals(this.owner, cat.owner);
+        && this.getOwner() == cat.getOwner();
   }
 
   /**

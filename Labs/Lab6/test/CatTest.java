@@ -13,6 +13,7 @@ class CatTest {
   private Cat cat3;
   private Person person1;
   private Person person2;
+  private Person person3;
 
   /**
    * Sets up test objects before each test method is run.
