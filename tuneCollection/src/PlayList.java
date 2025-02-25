@@ -67,9 +67,9 @@ public class PlayList {
    * "By title, ignoring case" to be considered the NATURAL ordering
    */
   void sortByTitle() {
-    // STUDENT TO IMPLEMENT THIS METHOD. REMEMBER TO IGNORE CASE.
-    Collections.sort(myPlayList, Comparator.comparing(Tune::getTitle));
+    myPlayList.sort(Comparator.comparing(tune -> tune.getTitle().toLowerCase()));
   }
+
 
   /**
    * Sorts so that the slower tempo items are at the front

@@ -69,17 +69,14 @@ class PlayListTest {
   void sortByTitle() {
     playlist1.addTune(mp3Tune1);
     playlist1.addTune(mp3Tune2);
+    playlist1.addTune(wavTune1);
+    playlist1.addTune(wavTune2);
     playlist1.sortByTitle();
-    assertEquals(mp3Tune1, playlist1.getTune(0));
-    assertEquals(mp3Tune2, playlist1.getTune(1));
 
-    playlist2.addTune(wavTune1);
-    playlist2.addTune(wavTune2);
-
-    playlist2.sortByTitle();
-    assertEquals(wavTune2, playlist2.getTune(0));
-    assertEquals(wavTune1, playlist2.getTune(1));
-
+    assertEquals(mp3Tune1, playlist1.getTune(0)); // "Big City"
+    assertEquals(wavTune2, playlist1.getTune(1)); // "Cat"
+    assertEquals(wavTune1, playlist1.getTune(2)); // "cutter"
+    assertEquals(mp3Tune2, playlist1.getTune(3)); // "Little World"
 
   }
 
