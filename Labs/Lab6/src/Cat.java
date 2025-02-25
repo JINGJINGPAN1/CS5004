@@ -121,7 +121,7 @@ public class Cat {
       return false;
     }
     Cat cat = (Cat) o;
-    return this.name == cat.name
+    return this.name.equals(cat.name)
         && this.age == cat.age
         && this.color == cat.color
         && this.getOwner() == cat.getOwner();
