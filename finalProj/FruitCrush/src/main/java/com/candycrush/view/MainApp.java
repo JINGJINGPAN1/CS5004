@@ -1,7 +1,5 @@
 package com.candycrush.view;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import javax.swing.JFrame;
 
 public class MainApp extends JFrame {
