@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -14,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 public class StartPanel extends JPanel {
   private BufferedImage bgImage;
@@ -39,18 +41,20 @@ public class StartPanel extends JPanel {
     JPanel buttonPanel = new JPanel();
     buttonPanel.setLayout(new FlowLayout());
     JButton startButton = new JButton("Start");
-    startButton.addActionListener(new ActionListener(){
+    startButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        // TODO: START GAME
         System.out.println("Game start");
 
-        GamePanel gamePanel = new GamePanel(frame);
-        frame.setContentPane(gamePanel);
-        frame.revalidate();
-        frame.repaint();
+        SwingUtilities.invokeLater(() -> {
+          GamePanel gamePanel = new GamePanel(frame);
+          frame.setContentPane(gamePanel);
+          frame.revalidate();
+          frame.repaint();
+        });
       }
     });
+
 
     // create exit Button
     JButton exitButton = new JButton("Exit");

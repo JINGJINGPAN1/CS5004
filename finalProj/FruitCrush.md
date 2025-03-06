@@ -17,7 +17,10 @@ Fruit Crush is a match-3 game where players match three or more identical fruits
 ## Realization Logic
 ### Game Components
 1. Panels(StartPanel, GamePanel)
-- StartPanel
+  (1) StartPanel
+    StartPanel is a welcome page. It has a startPanel Structure. 
+    It will paint a picture as the background, set the title, and create two Button(start, exit).
+
 
 
 2. Fruit Tile
