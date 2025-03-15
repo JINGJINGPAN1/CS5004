@@ -25,7 +25,7 @@ public class Background {
       System.err.println("Person image not found");
     }
 
-    System.out.println("Background image loaded");
+//    System.out.println("Background image loaded");
 
   }
 
@@ -42,6 +42,6 @@ public class Background {
       g.drawImage(personImage, 310, 50, null);
     }
 
-    System.out.println("Background image painting");
+//    System.out.println("Background image painting");
   }
 }

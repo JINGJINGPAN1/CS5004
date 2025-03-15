@@ -17,20 +17,21 @@ public class GameController {
     gold = new Gold();
   }
 
-  public void update() {
-    line.update();
-  }
-
   public void startGrabbing(){
     line.setState(LineState.GRAB);
+    System.out.println(line.getState());
   }
 
   public void startRetracting(){
     line.setState(LineState.RETRACT);
   }
 
+  public void update() {
+    line.update();
+  }
+
   public void draw(Graphics g) {
-    System.out.println("Drawing background and line");
+//    System.out.println("Drawing background and line");
     background.paintSelf(g);
     line.paintSelf(g);
     gold.paintSelf(g);

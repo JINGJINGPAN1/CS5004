@@ -24,7 +24,7 @@ public class Line {
     this.length = len;
     this.direction = direction;
     this.angleFactor = angleFactor;
-    System.out.println("Line initialized");
+//    System.out.println("Line initialized");
   }
 
   public void swing() {
@@ -34,9 +34,6 @@ public class Line {
       direction = -1;
     }
     angleFactor += ANGLE_STEP * direction;
-    endX = (int) (startX + length * Math.cos(angleFactor * Math.PI));
-    endY = (int) (startY + length * Math.sin(angleFactor * Math.PI));
-
   }
 
   public void grab(){
@@ -81,10 +78,14 @@ public class Line {
     }
 
     System.out.println("Line state: " + lineState);
+    System.out.println("Length: " + length);
 
   }
-  
+
   public void paintSelf(Graphics g) {
+    endX = (int) (startX + length * Math.cos(angleFactor * Math.PI));
+    endY = (int) (startY + length * Math.sin(angleFactor * Math.PI));
+
     System.out.println("Drawing line from (" + startX + "," + startY + ") to (" + endX + "," + endY + ")");
     g.setColor(Color.RED);
     g.drawLine(startX, startY, endX, endY);
