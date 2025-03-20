@@ -67,7 +67,7 @@ public class PlayList {
    * "By title, ignoring case" to be considered the NATURAL ordering
    */
   void sortByTitle() {
-    myPlayList.sort(Comparator.comparing(tune -> tune.getTitle().toLowerCase()));
+    Collections.sort(myPlayList);
   }
 
 
