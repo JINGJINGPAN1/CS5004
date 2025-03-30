@@ -1,3 +1,5 @@
+package model;
+
 /**
  * Represents the Model component for a Tic Tac Toe game.
  * Manages the game state, including the board, current player, and game over conditions.
@@ -21,8 +23,8 @@ public interface TTTModel {
   Player getCurrentPlayer();
 
   //BLACK BOX TEST Assertions:
-  // 1: After initializing the model, getCurrentPlayer() should return Player.X.
-  // 2: After a valid move by Player.X, getCurrentPlayer() should return Player.O.
+  // 1: After initializing the model, getCurrentPlayer() should return model.Player.X.
+  // 2: After a valid move by model.Player.X, getCurrentPlayer() should return model.Player.O.
 
   /**
    * Places the current player's mark on the specified cell and switches turns.
@@ -33,8 +35,8 @@ public interface TTTModel {
    */
   void makeMove(int row, int col) throws IllegalArgumentException, IllegalStateException;
   // BLACK BOX TEST Assertions:
-  // 1: Calling makeMove(0, 0) on an empty board should place Player.X at position (0, 0) and switch the current player to Player.O.
-  // 2: Calling makeMove(0, 0) on a cell already occupied by Player.X should throw an IllegalStateException.
+  // 1: Calling makeMove(0, 0) on an empty board should place model.Player.X at position (0, 0) and switch the current player to model.Player.O.
+  // 2: Calling makeMove(0, 0) on a cell already occupied by model.Player.X should throw an IllegalStateException.
 
   /**
    * Returns the player who has placed a mark at the specified cell, or null if empty.
@@ -45,7 +47,7 @@ public interface TTTModel {
    */
   Player getMark(int row, int col) throws IllegalArgumentException;
   // BLACK BOX TEST Assertions:
-  // 1: After makeMove(1, 1) by Player.X, getMark(1, 1) should return Player.X.
+  // 1: After makeMove(1, 1) by model.Player.X, getMark(1, 1) should return model.Player.X.
   // 2: After initializing the model, getMark(2, 2) should return null (indicating an empty cell).
 
   /**
@@ -55,7 +57,7 @@ public interface TTTModel {
   boolean isGameOver();
   // BLACK BOX TEST Assertions:
   // 1: After initializing the model, isGameOver() should return false.
-  // 2: After a sequence of moves that results in a win for Player.X, isGameOver() should return true.
+  // 2: After a sequence of moves that results in a win for model.Player.X, isGameOver() should return true.
 
   /**
    * Returns the winner of the game. Returns null if the game is a draw or not over.
@@ -63,13 +65,13 @@ public interface TTTModel {
    */
   Player getWinner();
   // BLACK BOX TEST Assertions:
-  // 1: After a sequence of moves that results in a win for Player.X, getWinner() should return Player.X.
+  // 1: After a sequence of moves that results in a win for model.Player.X, getWinner() should return model.Player.X.
   // 2: After a sequence of moves that results in a draw, getWinner() should return null.
   /**
    * Resets the game to its initial state: empty board, current player set to X, game over cleared.
    */
   void reset();
   // BLACK BOX TEST Assertions:
-  // 1: After calling reset() on a game in progress, getCurrentPlayer() should return Player.X.
+  // 1: After calling reset() on a game in progress, getCurrentPlayer() should return model.Player.X.
   // 2: After calling reset() on a game in progress, isGameOver() should return false.
 }

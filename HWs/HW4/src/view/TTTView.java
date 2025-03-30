@@ -1,7 +1,12 @@
+package view;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import model.Player;
+import model.TTTModel;
+import model.TTTModelImpl;
 
 /**
  * The graphical user interface for the Tic Tac Toe game using Swing.
@@ -23,7 +28,7 @@ public class TTTView {
     frame.setLayout(new BorderLayout());
 
     // Status label at the top
-    statusLabel = new JLabel("Player X's turn", SwingConstants.CENTER);
+    statusLabel = new JLabel("model.Player X's turn", SwingConstants.CENTER);
     frame.add(statusLabel, BorderLayout.NORTH);
 
     // Game board in the center
@@ -64,9 +69,9 @@ public class TTTView {
     // Update status label
     if (model.isGameOver()) {
       Player winner = model.getWinner();
-      statusLabel.setText(winner == null ? "Game Over: Draw!" : "Player " + winner + " wins!");
+      statusLabel.setText(winner == null ? "Game Over: Draw!" : "model.Player " + winner + " wins!");
     } else {
-      statusLabel.setText("Player " + model.getCurrentPlayer() + "'s turn");
+      statusLabel.setText("model.Player " + model.getCurrentPlayer() + "'s turn");
     }
   }
 

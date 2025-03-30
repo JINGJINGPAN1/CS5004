@@ -1,3 +1,5 @@
+package model;
+
 /**
  * Concrete implementation of the Tic Tac Toe Model interface.
  * Manages the game state, including the board, current player, and game outcome.
