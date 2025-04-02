@@ -12,6 +12,11 @@ public class TTTModelImpl implements TTTModel {
   private boolean gameOver;
   private Player winner;
 
+  private int[] rows;
+  private int[] cols;
+  private int mainDiagonal;
+  private int antiDiagonal;
+
   /**
    * Constructs a Tic Tac Toe game model with the specified board size.
    * @param size The size of the board (N x N).
@@ -74,6 +79,11 @@ public class TTTModelImpl implements TTTModel {
     currentPlayer = Player.X;
     gameOver = false;
     winner = null;
+
+    rows = new int[size];
+    cols = new int[size];
+    mainDiagonal = 0;
+    antiDiagonal = 0;
   }
 
   // Helper Methods
@@ -100,39 +110,26 @@ public class TTTModelImpl implements TTTModel {
     currentPlayer = (currentPlayer == Player.X) ? Player.O : Player.X;
   }
 
-  private boolean checkWin(Player player, int row, int col) {
-    return checkRow(player, row) || checkColumn(player, col)
-        || checkMainDiagonal(player, row, col) || checkAntiDiagonal(player, row, col);
+  private boolean checkWin(Player player, int row, int col){
+    int currentPlayerValue= getPlayerValue(player);
+    rows[row] += currentPlayerValue;
+    cols[col] += currentPlayerValue;
+
+    if(row == col){
+      mainDiagonal += currentPlayerValue;
+    }
+
+    if(row + col == size - 1){
+      antiDiagonal += currentPlayerValue;
+    }
+
+    return Math.abs(rows[row]) == size || Math.abs(cols[col]) == size
+        || Math.abs(mainDiagonal) == size || Math.abs(antiDiagonal) == size;
+
   }
 
-  private boolean checkRow(Player player, int row) {
-    for (int c = 0; c < size; c++) {
-      if (board[row][c] != player) return false;
-    }
-    return true;
-  }
-
-  private boolean checkColumn(Player player, int col) {
-    for (int r = 0; r < size; r++) {
-      if (board[r][col] != player) return false;
-    }
-    return true;
-  }
-
-  private boolean checkMainDiagonal(Player player, int row, int col) {
-    if (row != col) return false;
-    for (int i = 0; i < size; i++) {
-      if (board[i][i] != player) return false;
-    }
-    return true;
-  }
-
-  private boolean checkAntiDiagonal(Player player, int row, int col) {
-    if (row + col != size - 1) return false;
-    for (int i = 0; i < size; i++) {
-      if (board[i][size - 1 - i] != player) return false;
-    }
-    return true;
+  private int getPlayerValue(Player player) {
+    return player == Player.X ? -1 : 1;
   }
 
   private boolean isBoardFull() {
