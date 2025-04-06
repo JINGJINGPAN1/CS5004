@@ -2,41 +2,54 @@ package model;
 
 public class Gold {
   // Example: 3 golds
-  private int gold0X, gold0Y, gold0Width, gold0Height;
-  private int gold1X, gold1Y, gold1Width, gold1Height;
-  private int gold2X, gold2Y, gold2Width, gold2Height;
+  private int x, y, width, height;
+  private boolean collected = false;
 
-  public Gold() {
+  public Gold(int x, int y, int width, int height) {
     // coordinate examples
-    gold0X = 300;
-    gold0Y = 500;
-    gold0Width = 52;
-    gold0Height = 52;
-
-    gold1X = 500;
-    gold1Y = 300;
-    gold1Width = 82;
-    gold1Height = 82;
-
-    gold2X = 100;
-    gold2Y = 400;
-    gold2Width = 102;
-    gold2Height = 102;
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
   }
 
-  // Getter
-  public int getGold0X() { return gold0X; }
-  public int getGold0Y() { return gold0Y; }
-  public int getGold0Width() { return gold0Width; }
-  public int getGold0Height() { return gold0Height; }
+  public int getX() {
+    return x;
+  }
 
-  public int getGold1X() { return gold1X; }
-  public int getGold1Y() { return gold1Y; }
-  public int getGold1Width() { return gold1Width; }
-  public int getGold1Height() { return gold1Height; }
+  public void setX(int x) {
+    this.x = x;
+  }
 
-  public int getGold2X() { return gold2X; }
-  public int getGold2Y() { return gold2Y; }
-  public int getGold2Width() { return gold2Width; }
-  public int getGold2Height() { return gold2Height; }
+  public int getY() {
+    return y;
+  }
+
+  public void setY(int y) {
+    this.y = y;
+  }
+
+  public int getWidth() {
+    return width;
+  }
+
+  public void setWidth(int width) {
+    this.width = width;
+  }
+
+  public int getHeight() {
+    return height;
+  }
+
+  public void setHeight(int height) {
+    this.height = height;
+  }
+
+  public boolean isCollected() {
+    return collected;
+  }
+
+  public void setCollected(boolean collected) {
+    this.collected = collected;
+  }
 }

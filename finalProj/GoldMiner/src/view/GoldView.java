@@ -2,41 +2,32 @@ package view;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import model.Gold;
 import utils.ResourceLoader;
 
 public class GoldView {
-  private Gold gold;
-  // examples: 3 gold pictures
-  private BufferedImage goldImage0;
-  private BufferedImage goldImage1;
-  private BufferedImage goldImage2;
+  private List<Gold> goldList;
+  // Use a single gold image or multiple?
+  // Example: one image for all gold pieces:
+  private BufferedImage goldImage;
 
-  public GoldView(Gold gold) {
-    this.gold = gold;
-    goldImage0 = ResourceLoader.loadImage("resources/imgs/gold0.gif");
-    goldImage1 = ResourceLoader.loadImage("resources/imgs/gold1.gif");
-    goldImage2 = ResourceLoader.loadImage("resources/imgs/gold2.gif");
+  public GoldView(List<Gold> goldList) {
+    this.goldList = goldList;
+    goldImage = ResourceLoader.loadImage("resources/imgs/gold0.gif");
   }
 
   public void draw(Graphics g) {
-    if (goldImage0 != null) {
-      g.drawImage(goldImage0,
-          gold.getGold0X(), gold.getGold0Y(),
-          gold.getGold0Width(), gold.getGold0Height(),
-          null);
-    }
-    if (goldImage1 != null) {
-      g.drawImage(goldImage1,
-          gold.getGold1X(), gold.getGold1Y(),
-          gold.getGold1Width(), gold.getGold1Height(),
-          null);
-    }
-    if (goldImage2 != null) {
-      g.drawImage(goldImage2,
-          gold.getGold2X(), gold.getGold2Y(),
-          gold.getGold2Width(), gold.getGold2Height(),
-          null);
+    if (goldImage != null) {
+      for (Gold gold : goldList) {
+        // draw each gold in the list
+        g.drawImage(
+            goldImage,
+            gold.getX(), gold.getY(),
+            gold.getWidth(), gold.getHeight(),
+            null
+        );
+      }
     }
   }
 }

@@ -22,6 +22,9 @@ public class Line {
   private static final int MAX_LENGTH = 500;
   private static final int DELTA_LENGTH = 10;
 
+  // Reference to whichever Gold object we’re currently carrying (null if none)
+  private Gold grabbedGold = null;
+
   public Line(int startX, int startY, int initialLength, int initialDirection, double initialAngleFactor) {
     this.startX = startX;
     this.startY = startY;
@@ -61,6 +64,7 @@ public class Line {
     if (length < MAX_LENGTH) {
       length += DELTA_LENGTH;
     } else {
+      // once fully extended, switch to retract
       setLineState(LineState.RETRACT);
     }
   }
@@ -69,7 +73,22 @@ public class Line {
   private void retract() {
     if (length > MIN_LENGTH) {
       length -= DELTA_LENGTH;
+
+      // If carrying gold, move it with the line tip
+      if(grabbedGold != null && !grabbedGold.isCollected()) {
+        int tipX = getEndX();
+        int tipY = getEndY();
+
+        // Center the gold on the line tip or offset as needed
+        grabbedGold.setX(tipX - grabbedGold.getWidth() / 2);
+        grabbedGold.setY(tipY - grabbedGold.getHeight() / 2);
+      }
     } else {
+      // Done retracting: if we had a grabbed gold, mark it collected
+      if (grabbedGold != null) {
+        grabbedGold.setCollected(true); // or move it off-screen
+        grabbedGold = null;
+      }
       setLineState(LineState.SWING);
     }
   }
@@ -133,5 +152,13 @@ public class Line {
 
   public void setDirection(int direction) {
     this.direction = direction;
+  }
+
+  // Gold getter/setter
+  public Gold getGrabbedGold() {
+    return grabbedGold;
+  }
+  public void setGrabbedGold(Gold grabbedGold) {
+    this.grabbedGold = grabbedGold;
   }
 }

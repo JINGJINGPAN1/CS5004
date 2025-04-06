@@ -1,6 +1,7 @@
 package view;
 
 import controller.GameController;
+import java.util.List;
 import model.Gold;
 import model.Line;
 import javax.swing.*;
@@ -22,12 +23,12 @@ public class GameWin extends JFrame {
 
     // get models from controller
     Line line = gameController.getLine();
-    Gold gold = gameController.getGold();
+    List<Gold> goldList = gameController.getGoldList();
 
     // initialize all the view
     backgroundView = new BackgroundView();
     lineView = new LineView(line);
-    goldView = new GoldView(gold);
+    goldView = new GoldView(goldList);
 
     // put all the views on game panel
     gamePanel = new GamePanel(gameController, backgroundView, lineView, goldView);
