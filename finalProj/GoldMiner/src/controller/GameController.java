@@ -1,39 +1,43 @@
 package controller;
 
-import java.awt.Graphics;
+import model.Gold;
+import model.Line;
 import model.LineState;
-import view.Background;
-import view.Gold;
-import view.Line;
 
 public class GameController {
-  private Background background;
   private Line line;
   private Gold gold;
 
   public GameController() {
-    background = new Background();
-    line = new Line(380, 180, 500, 500, 100, 1, 0);
-    gold = new Gold();
+    // 初始化 Model
+    this.line = new Line(
+        380,   // startX
+        180,   // startY
+        100,   // initialLength
+        1,     // initialDirection
+        0      // initialAngleFactor
+    );
+    this.gold = new Gold();
   }
 
-  public void startGrabbing(){
-    line.setState(LineState.GRAB);
-    System.out.println(line.getState());
+  public void startGrabbing() {
+    line.startGrabbing();
   }
 
-  public void startRetracting(){
-    line.setState(LineState.RETRACT);
+  public void startRetracting() {
+    line.startRetracting();
   }
+
 
   public void update() {
     line.update();
   }
 
-  public void draw(Graphics g) {
-//    System.out.println("Drawing background and line");
-    background.paintSelf(g);
-    line.paintSelf(g);
-    gold.paintSelf(g);
+  public Line getLine() {
+    return line;
+  }
+
+  public Gold getGold() {
+    return gold;
   }
 }
