@@ -7,6 +7,7 @@ import model.Line;
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import model.LineState;
 import model.Stone;
 
 public class GameWin extends JFrame {
@@ -54,8 +55,14 @@ public class GameWin extends JFrame {
       public void mouseClicked(MouseEvent e) {
         super.mouseClicked(e);
         if (e.getButton() == MouseEvent.BUTTON1) {
-          // game controller to start grabbing
-          gameController.startGrabbing();
+          // Only allow grabbing if line is in Swing or Grab
+          if(gameController.getLine().getLineState() == LineState.GRAB ||
+          gameController.getLine().getLineState() == LineState.SWING){
+            // game controller to start grabbing
+            gameController.startGrabbing();
+          }else{
+            System.out.println("Cannot grab now, line is retracting.");
+          }
         }
       }
     });

@@ -18,7 +18,7 @@ public class GameController {
     line = new Line(
         380,  // startX
         180,  // startY
-        100,  // initialLength
+        50,  // initialLength
         1,    // initialDirection
         0.5   // initialAngleFactor
     );
@@ -33,22 +33,19 @@ public class GameController {
     stoneList = new ArrayList<>();
     stoneList.add(new Stone(115, 600, 41, 41));
     stoneList.add(new Stone(600, 600, 100, 100));
-    stoneList.add(new Stone(250, 250, 76, 76));
+    stoneList.add(new Stone(250, 400, 76, 76));
   }
 
   public void update() {
-    // 1) If line is NOT already carrying a gold piece, check collisions with all gold
-    if (line.getGrabbedGold() == null || line.getGrabbedStone() == null) {
+    // 1) Check collision only if the line isn't already carrying something
+    //    (meaning both grabbedGold and grabbedStone are null).
+    if (line.getGrabbedGold() == null && line.getGrabbedStone() == null) {
       checkCollision();
     }
-
     // 2) Update the line each frame
     line.update();
-
     // 3) Remove gold that is marked as collected or stone that is marked as collected
-    removeCollectedGold();
-    removeCollectedStone();
-
+    removeCollectedItems();
   }
 
   private void checkCollision() {
@@ -59,38 +56,42 @@ public class GameController {
       int tipY = line.getEndY();
 
       for (Gold gold : goldList) {
-        if (!gold.isCollected()) {
-          if (tipX > gold.getX() && tipX < gold.getX() + gold.getWidth()
-              && tipY > gold.getY() && tipY < gold.getY() + gold.getHeight()) {
-
-            // We have collision
-            System.out.println("Collision detected with a gold piece!");
-            // Let the line hold this gold
-            line.setGrabbedGold(gold);
-            // Switch line to RETRACT immediately
-            line.setLineState(LineState.RETRACT);
-            // Break so we only grab one gold at a time
-            break;
-          }
+        if (!gold.isCollected() && isColliding(tipX, tipY, gold)) {
+          // We have collision
+          System.out.println("Collision detected with a gold piece!");
+          // Let the line hold this gold
+          line.setGrabbedGold(gold);
+          // Switch line to RETRACT immediately
+          line.setLineState(LineState.RETRACT);
+          // Break so we only grab one gold at a time
+          break;
         }
       }
 
       for(Stone stone : stoneList) {
-        if(!stone.isCollected()) {
-          if(tipX > stone.getX() && tipX < stone.getX() + stone.getWidth()
-          && tipY > stone.getY() && tipY < stone.getY() + stone.getHeight()) {
-
-            System.out.println("Collision detected with a stone piece!");
-            line.setGrabbedStone(stone);
-            line.setLineState(LineState.RETRACT);
-            break;
-          }
+        if(!stone.isCollected() && isColliding(tipX, tipY, stone)) {
+          System.out.println("Collision detected with a stone piece!");
+          line.setGrabbedStone(stone);
+          line.setLineState(LineState.RETRACT);
+          break;
         }
       }
     }
   }
 
-  private void removeCollectedGold() {
+  private boolean isColliding(int x, int y, Gold gold) {
+    return x > gold.getX() && x < gold.getX() + gold.getWidth()
+        && y > gold.getY() && y < gold.getY() + gold.getHeight();
+  }
+
+  private boolean isColliding(int x, int y, Stone stone) {
+    return x > stone.getX() && x < stone.getX() + stone.getWidth()
+        && y > stone.getY() && y < stone.getY() + stone.getHeight();
+  }
+
+
+
+  private void removeCollectedItems() {
     // Optionally remove any gold that isCollected from the list,
     // so it's no longer drawn or processed.
     Iterator<Gold> iterator = goldList.iterator();
@@ -100,20 +101,16 @@ public class GameController {
         iterator.remove();
       }
     }
-  }
 
-  private void removeCollectedStone() {
-    // Optionally remove any stone that isCollected from the list,
-    // so it's no longer drawn or processed.
-    Iterator<Stone> iterator = stoneList.iterator();
-    while (iterator.hasNext()) {
-      Stone g = iterator.next();
+    Iterator<Stone> iterator1 = stoneList.iterator();
+    while (iterator1.hasNext()) {
+      Stone g = iterator1.next();
       if (g.isCollected()) {
-        iterator.remove();
+        iterator1.remove();
       }
     }
   }
-  
+
   // For the View
   public List<Gold> getGoldList() {
     return goldList;
