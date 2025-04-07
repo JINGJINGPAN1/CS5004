@@ -6,10 +6,12 @@ import model.LineState;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import model.Stone;
 
 public class GameController {
   private Line line;
   private List<Gold> goldList;
+  private List<Stone> stoneList;
 
   public GameController() {
     // Initialize the line
@@ -26,19 +28,27 @@ public class GameController {
     goldList.add(new Gold(300, 500, 52, 52));
     goldList.add(new Gold(500, 300, 82, 82));
     goldList.add(new Gold(100, 400, 102, 102));
+
+    // create multiple Stone pieces
+    stoneList = new ArrayList<>();
+    stoneList.add(new Stone(115, 600, 41, 41));
+    stoneList.add(new Stone(600, 600, 100, 100));
+    stoneList.add(new Stone(250, 250, 76, 76));
   }
 
   public void update() {
     // 1) If line is NOT already carrying a gold piece, check collisions with all gold
-    if (line.getGrabbedGold() == null) {
+    if (line.getGrabbedGold() == null || line.getGrabbedStone() == null) {
       checkCollision();
     }
 
     // 2) Update the line each frame
     line.update();
 
-    // 3) Remove gold that is marked as collected
+    // 3) Remove gold that is marked as collected or stone that is marked as collected
     removeCollectedGold();
+    removeCollectedStone();
+
   }
 
   private void checkCollision() {
@@ -64,6 +74,19 @@ public class GameController {
           }
         }
       }
+
+      for(Stone stone : stoneList) {
+        if(!stone.isCollected()) {
+          if(tipX > stone.getX() && tipX < stone.getX() + stone.getWidth()
+          && tipY > stone.getY() && tipY < stone.getY() + stone.getHeight()) {
+
+            System.out.println("Collision detected with a stone piece!");
+            line.setGrabbedStone(stone);
+            line.setLineState(LineState.RETRACT);
+            break;
+          }
+        }
+      }
     }
   }
 
@@ -79,9 +102,24 @@ public class GameController {
     }
   }
 
+  private void removeCollectedStone() {
+    // Optionally remove any stone that isCollected from the list,
+    // so it's no longer drawn or processed.
+    Iterator<Stone> iterator = stoneList.iterator();
+    while (iterator.hasNext()) {
+      Stone g = iterator.next();
+      if (g.isCollected()) {
+        iterator.remove();
+      }
+    }
+  }
+  
   // For the View
   public List<Gold> getGoldList() {
     return goldList;
+  }
+  public List<Stone> getStoneList() {
+    return stoneList;
   }
 
   public Line getLine() {

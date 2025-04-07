@@ -18,12 +18,13 @@ public class Line {
   private static final double ANGLE_STEP = 0.005;
 
   // retractable range
-  private static final int MIN_LENGTH = 100;
+  private static final int MIN_LENGTH = 50;
   private static final int MAX_LENGTH = 500;
   private static final int DELTA_LENGTH = 10;
 
-  // Reference to whichever Gold object we’re currently carrying (null if none)
+  // Reference to whichever Gold/stone object we’re currently carrying (null if none)
   private Gold grabbedGold = null;
+  private Stone grabbedStone = null;
 
   public Line(int startX, int startY, int initialLength, int initialDirection, double initialAngleFactor) {
     this.startX = startX;
@@ -83,11 +84,24 @@ public class Line {
         grabbedGold.setX(tipX - grabbedGold.getWidth() / 2);
         grabbedGold.setY(tipY - grabbedGold.getHeight() / 2);
       }
+      // If carrying stone, move it with the line tip
+      if(grabbedStone != null && !grabbedStone.isCollected()) {
+        int tipX = getEndX();
+        int tipY = getEndY();
+        grabbedStone.setX(tipX - grabbedStone.getWidth() / 2);
+        grabbedStone.setY(tipY - grabbedStone.getHeight() / 2);
+      }
+
     } else {
       // Done retracting: if we had a grabbed gold, mark it collected
       if (grabbedGold != null) {
         grabbedGold.setCollected(true); // or move it off-screen
         grabbedGold = null;
+      }
+
+      if (grabbedStone != null) {
+        grabbedStone.setCollected(true);
+        grabbedStone = null;
       }
       setLineState(LineState.SWING);
     }
@@ -160,5 +174,13 @@ public class Line {
   }
   public void setGrabbedGold(Gold grabbedGold) {
     this.grabbedGold = grabbedGold;
+  }
+
+  public Stone getGrabbedStone() {
+    return grabbedStone;
+  }
+
+  public void setGrabbedStone(Stone grabbedStone) {
+    this.grabbedStone = grabbedStone;
   }
 }

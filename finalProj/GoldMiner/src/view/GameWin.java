@@ -7,6 +7,7 @@ import model.Line;
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import model.Stone;
 
 public class GameWin extends JFrame {
   private GameController gameController;
@@ -15,6 +16,7 @@ public class GameWin extends JFrame {
   private BackgroundView backgroundView;
   private LineView lineView;
   private GoldView goldView;
+  private StoneView stoneView;
   private GamePanel gamePanel;
 
   public GameWin() {
@@ -24,14 +26,16 @@ public class GameWin extends JFrame {
     // get models from controller
     Line line = gameController.getLine();
     List<Gold> goldList = gameController.getGoldList();
+    List<Stone> stoneList = gameController.getStoneList();
 
     // initialize all the view
     backgroundView = new BackgroundView();
     lineView = new LineView(line);
     goldView = new GoldView(goldList);
+    stoneView = new StoneView(stoneList);
 
     // put all the views on game panel
-    gamePanel = new GamePanel(gameController, backgroundView, lineView, goldView);
+    gamePanel = new GamePanel(gameController, backgroundView, lineView, goldView, stoneView);
 
     // add panel to game window
     add(gamePanel);

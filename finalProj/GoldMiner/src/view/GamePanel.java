@@ -12,15 +12,18 @@ public class GamePanel extends JPanel {
   private BackgroundView backgroundView;
   private LineView lineView;
   private GoldView goldView;
+  private StoneView stoneView;
 
   public GamePanel(GameController gameController,
       BackgroundView backgroundView,
       LineView lineView,
-      GoldView goldView) {
+      GoldView goldView,
+      StoneView stoneView) {
     this.gameController = gameController;
     this.backgroundView = backgroundView;
     this.lineView = lineView;
     this.goldView = goldView;
+    this.stoneView = stoneView;
     setDoubleBuffered(true);  // use double buffering to prevent flickering when updating the display
   }
 
@@ -38,6 +41,11 @@ public class GamePanel extends JPanel {
     // paint gold
     if (goldView != null) {
       goldView.draw(g);
+    }
+
+    // paint stone
+    if (stoneView != null) {
+      stoneView.draw(g);
     }
   }
 }
