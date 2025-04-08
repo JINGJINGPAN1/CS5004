@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.Random;
 import model.Gold;
 import model.Line;
 import model.LineState;
@@ -9,31 +10,78 @@ import java.util.List;
 import model.Stone;
 
 public class GameController {
+  private Random random;
   private Line line;
   private List<Gold> goldList;
   private List<Stone> stoneList;
 
-  public GameController() {
-    // Initialize the line
-    line = new Line(
-        380,  // startX
-        180,  // startY
-        50,  // initialLength
-        1,    // initialDirection
-        0.5   // initialAngleFactor
-    );
+public GameController() {
+  random = new Random();
 
-    // Create multiple gold pieces
-    goldList = new ArrayList<>();
-    goldList.add(new Gold(300, 500, 52, 52));
-    goldList.add(new Gold(500, 300, 82, 82));
-    goldList.add(new Gold(100, 400, 102, 102));
+  // Initialize the line
+  line = new Line(380, 180, 50, 1, 0.5);
 
-    // create multiple Stone pieces
-    stoneList = new ArrayList<>();
-    stoneList.add(new Stone(115, 600, 41, 41));
-    stoneList.add(new Stone(600, 600, 100, 100));
-    stoneList.add(new Stone(250, 400, 76, 76));
+  // Initialize BOTH lists first
+  goldList = new ArrayList<>();
+  stoneList = new ArrayList<>();
+
+  // Now produce gold (stoneList is not null anymore)
+  for(int i = 0; i < 5; i++){
+    int w = 30 + random.nextInt(71);
+    int h = 30 + random.nextInt(71);
+
+    int[] pos = generateNonOverlapPosition(w, h);
+    goldList.add(new Gold(pos[0], pos[1], w, h));
+  }
+
+  // Then produce stone
+  for(int i = 0; i < 5; i++){
+    int w = 30 + random.nextInt(71);
+    int h = 30 + random.nextInt(71);
+
+    int[] pos = generateNonOverlapPosition(w, h);
+    stoneList.add(new Stone(pos[0], pos[1], w, h));
+  }
+}
+
+  private int[] generateNonOverlapPosition(int w, int h) {
+    // gameWindow 768 * 1000
+    int maxX = 768;
+    int minY = 200;
+    int maxY = 1000;
+
+    int playableHeight = maxY - minY;
+
+    while(true){
+      int x = random.nextInt(maxX - w);
+      int y = random.nextInt(playableHeight - h) + minY;
+
+      // check isOverlapped
+      if(!isOverlapped(x, y, w, h)){
+        return new int[]{x, y};
+      }
+    }
+  }
+
+  private boolean isOverlapped(int x, int y, int w, int h) {
+    for(Gold gold : goldList){
+      if(isRectOverlap(x, y, w, h, gold.getX(), gold.getY(), gold.getWidth(), gold.getHeight())){
+        return true;
+      }
+    }
+
+    for(Stone stone : stoneList){
+      if(isRectOverlap(x, y, w, h, stone.getX(), stone.getY(), stone.getWidth(), stone.getHeight())){
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private boolean isRectOverlap(int x1, int y1, int w1, int h1, int x2, int y2, int w2,
+      int h2) {
+    return x1 < x2 + w2 && (x1 + w1) > x2
+        && y1 < y2 + h2 && (y1 + h1) > y2;
   }
 
   public void update() {

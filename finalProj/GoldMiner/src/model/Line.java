@@ -19,7 +19,7 @@ public class Line {
 
   // retractable range
   private static final int MIN_LENGTH = 50;
-  private static final int MAX_LENGTH = 600;
+  private static final int MAX_LENGTH = 1000;
   private static final int DELTA_LENGTH = 10;
 
   // Reference to whichever Gold/stone object we’re currently carrying (null if none)
@@ -62,14 +62,15 @@ public class Line {
 
   // grab
   private void grab() {
-    if (length < MAX_LENGTH) {
-      length += DELTA_LENGTH;
-    } else {
-      // once fully extended, switch to retract
+    int tipX = getEndX();
+    int tipY = getEndY();
+    if(length > MAX_LENGTH || tipX <= 0 || tipX >= 768 || tipY <= 0 || tipY >= 1000) {
       setLineState(LineState.RETRACT);
     }
+    else{
+      length += DELTA_LENGTH;
+    }
   }
-
   // retract
   private void retract() {
     if (length > MIN_LENGTH) {
