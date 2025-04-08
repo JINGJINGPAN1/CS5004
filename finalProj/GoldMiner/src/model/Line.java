@@ -13,14 +13,17 @@ public class Line {
   private LineState lineState = LineState.SWING;
 
   // swing angle factor range
-  private static final double MIN_ANGLE = 0.1;
-  private static final double MAX_ANGLE = 0.9;
+  private static final double MIN_ANGLE = 0.01;
+  private static final double MAX_ANGLE = 0.99;
   private static final double ANGLE_STEP = 0.005;
 
   // retractable range
   private static final int MIN_LENGTH = 50;
   private static final int MAX_LENGTH = 1000;
   private static final int DELTA_LENGTH = 10;
+
+  // base retract speed
+  private double BASE_RETRACT_SPEED = 5;
 
   // Reference to whichever Gold/stone object we’re currently carrying (null if none)
   private Gold grabbedGold = null;
@@ -62,19 +65,31 @@ public class Line {
 
   // grab
   private void grab() {
-    int tipX = getEndX();
-    int tipY = getEndY();
-    if(length > MAX_LENGTH || tipX <= 0 || tipX >= 768 || tipY <= 0 || tipY >= 1000) {
+    if (length < MAX_LENGTH) {
+      length += DELTA_LENGTH;
+
+      // After extending, check if the tip is out of bounds
+      int tipX = getEndX();
+      int tipY = getEndY();
+
+      // If the tip is beyond the left/right/bottom/top edges of the game area,
+      // we consider it "hitting a wall" and immediately switch to RETRACT
+      if (tipX < 0 || tipX > 600 || tipY < 0 || tipY > 800) {
+        setLineState(LineState.RETRACT);
+      }
+    } else {
+      // once fully extended, switch to retract
       setLineState(LineState.RETRACT);
     }
-    else{
-      length += DELTA_LENGTH;
-    }
   }
+
   // retract
   private void retract() {
+    // figure out how fast we should retract
+    double retractSpeed = calculateRetractSpeed();
+
     if (length > MIN_LENGTH) {
-      length -= DELTA_LENGTH;
+      length -= retractSpeed;
 
       // If carrying gold, move it with the line tip
       if((grabbedGold != null && !grabbedGold.isCollected()) ) {
@@ -105,6 +120,41 @@ public class Line {
         grabbedStone = null;
       }
       setLineState(LineState.SWING);
+    }
+  }
+
+  private double calculateRetractSpeed() {
+    // if carrying gold, slow down or speed up based on gold size
+    if(grabbedGold != null) {
+      return computeSpeedForGoldSize(grabbedGold.getWidth(), grabbedGold.getHeight());
+    }
+
+    // if carrying gold, slow down or speed up based on stone size
+    if(grabbedStone != null) {
+      return computeSpeedForStoneSize(grabbedStone.getWidth(), grabbedStone.getHeight());
+    }
+    return BASE_RETRACT_SPEED;
+  }
+
+  private double computeSpeedForGoldSize(int width, int height) {
+    int area = width * height;
+    if(area < 1000) {
+      return BASE_RETRACT_SPEED;
+    }else if(area < 4000){
+      return BASE_RETRACT_SPEED * 0.9;
+    }else{
+      return BASE_RETRACT_SPEED * 0.7;
+    }
+  }
+
+  private double computeSpeedForStoneSize(int width, int height) {
+    int area = width * height;
+    if(area < 1000) {
+      return BASE_RETRACT_SPEED * 0.5;
+    }else if(area < 4000){
+      return BASE_RETRACT_SPEED * 0.2;
+    }else{
+      return BASE_RETRACT_SPEED * 0.1;
     }
   }
 

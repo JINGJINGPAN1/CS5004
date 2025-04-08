@@ -44,8 +44,9 @@ public class GameWin extends JFrame {
 
   public void launch() {
     setTitle("Gold Miner");
-    setSize(768, 1000);
+    setSize(600, 800);
     setLocationRelativeTo(null);
+    setResizable(false);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setVisible(true);
 

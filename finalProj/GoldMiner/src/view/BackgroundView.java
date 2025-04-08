@@ -23,7 +23,7 @@ public class BackgroundView {
       g.drawImage(bgImage, 0, 200, null);
     }
     if (personImage != null) {
-      g.drawImage(personImage, 310, 50, null);
+      g.drawImage(personImage, 230, 50, null);
     }
   }
 }

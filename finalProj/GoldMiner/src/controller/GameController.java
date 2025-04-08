@@ -1,12 +1,14 @@
 package controller;
 
 import java.util.Random;
+import model.GameTimer;
 import model.Gold;
 import model.Line;
 import model.LineState;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import model.Score;
 import model.Stone;
 
 public class GameController {
@@ -14,21 +16,31 @@ public class GameController {
   private Line line;
   private List<Gold> goldList;
   private List<Stone> stoneList;
+  private final Score score;
+  private GameTimer gameTimer;
+  private boolean gameOver = false;
 
 public GameController() {
   random = new Random();
 
   // Initialize the line
-  line = new Line(380, 180, 50, 1, 0.5);
+  line = new Line(300, 180, 50, 1, 0.5);
 
   // Initialize BOTH lists first
   goldList = new ArrayList<>();
   stoneList = new ArrayList<>();
 
+  // Initialize the Score
+  score = new Score();
+
+  // Initialize the game timer
+  gameTimer = new GameTimer(30.0);
+
   // Now produce gold (stoneList is not null anymore)
   for(int i = 0; i < 5; i++){
-    int w = 30 + random.nextInt(71);
-    int h = 30 + random.nextInt(71);
+    int rand_num = random.nextInt(71);
+    int w = 30 + rand_num;
+    int h = 30 + rand_num;
 
     int[] pos = generateNonOverlapPosition(w, h);
     goldList.add(new Gold(pos[0], pos[1], w, h));
@@ -36,8 +48,9 @@ public GameController() {
 
   // Then produce stone
   for(int i = 0; i < 5; i++){
-    int w = 30 + random.nextInt(71);
-    int h = 30 + random.nextInt(71);
+    int rand_num = random.nextInt(71);
+    int w = 30 + rand_num;
+    int h = 30 + rand_num;
 
     int[] pos = generateNonOverlapPosition(w, h);
     stoneList.add(new Stone(pos[0], pos[1], w, h));
@@ -46,9 +59,9 @@ public GameController() {
 
   private int[] generateNonOverlapPosition(int w, int h) {
     // gameWindow 768 * 1000
-    int maxX = 768;
+    int maxX = 600;
     int minY = 200;
-    int maxY = 1000;
+    int maxY = 800;
 
     int playableHeight = maxY - minY;
 
@@ -84,7 +97,33 @@ public GameController() {
         && y1 < y2 + h2 && (y1 + h1) > y2;
   }
 
+  public GameTimer getGameTimer() {
+    return gameTimer;
+  }
+
+  public void setGameTimer(GameTimer gameTimer) {
+    this.gameTimer = gameTimer;
+  }
+
+  public boolean isGameOver() {
+    return gameOver;
+  }
+
+  public void setGameOver(boolean gameOver) {
+    this.gameOver = gameOver;
+  }
+
   public void update() {
+    if(gameOver){
+      return;
+    }
+    // We approximate each frame as 16 ms => 0.016s
+    gameTimer.update(0.016);
+    if(gameTimer.isTimeUp()){
+      gameOver = true;
+      System.out.println("Game Over");
+      return;
+    }
     // 1) Check collision only if the line isn't already carrying something
     //    (meaning both grabbedGold and grabbedStone are null).
     if (line.getGrabbedGold() == null && line.getGrabbedStone() == null) {
@@ -136,26 +175,52 @@ public GameController() {
     return x > stone.getX() && x < stone.getX() + stone.getWidth()
         && y > stone.getY() && y < stone.getY() + stone.getHeight();
   }
-
-
-
+  
   private void removeCollectedItems() {
     // Optionally remove any gold that isCollected from the list,
     // so it's no longer drawn or processed.
     Iterator<Gold> iterator = goldList.iterator();
     while (iterator.hasNext()) {
-      Gold g = iterator.next();
-      if (g.isCollected()) {
+      Gold gold = iterator.next();
+      if (gold.isCollected()) {
+
+        // add points for the gold
+        score.addPoints(computeGoldPoints(gold));
         iterator.remove();
       }
     }
 
     Iterator<Stone> iterator1 = stoneList.iterator();
     while (iterator1.hasNext()) {
-      Stone g = iterator1.next();
-      if (g.isCollected()) {
+      Stone stone = iterator1.next();
+      if (stone.isCollected()) {
+        score.addPoints(computeStonePoints(stone));
         iterator1.remove();
       }
+    }
+  }
+
+  private int computeStonePoints(Stone stone) {
+    int area = stone.getWidth() * stone.getHeight();
+    int baseScore = 10;
+    if(area < 1000) {
+      return baseScore;
+    }else if(area < 4000){
+      return baseScore * 2;
+    }else{
+      return baseScore * 5;
+    }
+  }
+
+  private int computeGoldPoints(Gold gold) {
+    int area = gold.getWidth() * gold.getHeight();
+    int baseScore = 50;
+    if(area < 1000) {
+      return baseScore;
+    }else if(area < 4000){
+      return baseScore * 2;
+    }else{
+      return baseScore * 5;
     }
   }
 
@@ -178,5 +243,10 @@ public GameController() {
 
   public void startRetracting() {
     line.startRetracting();
+  }
+
+  public Score getScore() {
+    System.out.println("Current score: " + score);
+    return score;
   }
 }

@@ -3,6 +3,7 @@ package view;
 import controller.GameController;
 import java.awt.Graphics;
 import javax.swing.JPanel;
+import model.GameTimer;
 
 /**
  * Responsible for painting models in the Jpanel
@@ -13,6 +14,8 @@ public class GamePanel extends JPanel {
   private LineView lineView;
   private GoldView goldView;
   private StoneView stoneView;
+  private ScoreView scoreView;
+  private GameTimerView gameTimerView;
 
   public GamePanel(GameController gameController,
       BackgroundView backgroundView,
@@ -24,6 +27,8 @@ public class GamePanel extends JPanel {
     this.lineView = lineView;
     this.goldView = goldView;
     this.stoneView = stoneView;
+    this.scoreView = new ScoreView(gameController.getScore());
+    this.gameTimerView = new GameTimerView(gameController.getGameTimer());
     setDoubleBuffered(true);  // use double buffering to prevent flickering when updating the display
   }
 
@@ -46,6 +51,14 @@ public class GamePanel extends JPanel {
     // paint stone
     if (stoneView != null) {
       stoneView.draw(g);
+    }
+
+    if (scoreView != null) {
+      scoreView.draw(g);
+    }
+
+    if (gameTimerView != null) {
+      gameTimerView.draw(g);
     }
   }
 }
