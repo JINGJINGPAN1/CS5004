@@ -4,6 +4,7 @@ import java.util.Random;
 import model.GameTimer;
 import model.Gold;
 import model.Item;
+import model.Level;
 import model.Line;
 import model.LineState;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class GameController {
   private GameTimer gameTimer;
   private boolean gameOver = false;
   private List<Item> itemList;
+  private Level level;
 
   public GameController() {
     random = new Random();
@@ -39,7 +41,8 @@ public class GameController {
     // Initialize the Score
     score = new Score();
     // Initialize the game timer
-    gameTimer = new GameTimer(20.0);
+    gameTimer = new GameTimer(10.0);
+    level = new Level();
 
   }
 
@@ -64,8 +67,6 @@ public class GameController {
       itemList.add(new Stone(pos[0], pos[1], w, h));
     }
   }
-
-
 
   private int[] generateNonOverlapPosition(int w, int h) {
     // gameWindow 768 * 1000
@@ -135,9 +136,15 @@ public class GameController {
     // We approximate each frame as 16 ms => 0.016s
     gameTimer.update(0.016);
     if(gameTimer.isTimeUp()){
-      gameOver = true;
-      System.out.println("Game Over");
-      return;
+      if(level.shouldLevelUp(score.getCurrentScore())){
+//        level.levelUp();
+//        gameTimer.reset(20.0);
+        gotoNextLevel();
+      }else{
+        gameOver = true;
+        System.out.println("Game Over");
+        return;
+      }
     }
     // 1) Check collision only if the line isn't already carrying something
     //    (meaning both grabbedGold and grabbedStone are null).
@@ -151,6 +158,15 @@ public class GameController {
     line.update();
     // 3) Remove gold that is marked as collected or stone that is marked as collected
     removeCollectedItems();
+  }
+
+  private void gotoNextLevel() {
+    level.levelUp();
+    gameTimer.reset(15.0);
+    itemList.clear();
+    generateGold(6);
+    generateStone(6);
+    line.reset();
   }
 
   private void checkCollision() {
@@ -293,5 +309,9 @@ public class GameController {
 
   public List<Item> getItemList() {
     return itemList;
+  }
+
+  public Level getLevel() {
+    return level;
   }
 }

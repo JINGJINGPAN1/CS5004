@@ -18,6 +18,7 @@ public class GamePanel extends JPanel {
   private ItemView itemView;
   private ScoreView scoreView;
   private GameTimerView gameTimerView;
+  private LevelView levelView;
 
   public GamePanel(GameController gameController,
       BackgroundView backgroundView,
@@ -27,8 +28,10 @@ public class GamePanel extends JPanel {
     this.backgroundView = backgroundView;
     this.lineView = lineView;
     this.scoreView = new ScoreView(gameController.getScore());
+    this.levelView = new LevelView(gameController.getLevel());
     this.gameTimerView = new GameTimerView(gameController.getGameTimer());
     this.itemView = itemView;
+
     setDoubleBuffered(true);  // use double buffering to prevent flickering when updating the display
   }
 
@@ -65,9 +68,13 @@ public class GamePanel extends JPanel {
       gameTimerView.draw(g);
     }
 
+    if (levelView != null) {
+      levelView.draw(g);
+    }
+
     // paint the latest list
     itemView.setItemList(gameController.getItemList());
-    
+
     itemView.draw(g);
 
 
