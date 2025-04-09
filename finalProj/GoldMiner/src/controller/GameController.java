@@ -259,9 +259,9 @@ public class GameController {
       if (item.isCollected()) {
         // Add points based on item type
         if (item instanceof Gold) {
-          score.addPoints(item.getScoreValue(item.getWidth(), item.getHeight()));
+          score.addPoints(item.getScoreValue());
         } else if (item instanceof Stone) {
-          score.addPoints(item.getScoreValue(item.getWidth(), item.getHeight()));
+          score.addPoints(item.getScoreValue());
         }
         // Remove the item from the list so it is no longer drawn or processed.
         iterator.remove();

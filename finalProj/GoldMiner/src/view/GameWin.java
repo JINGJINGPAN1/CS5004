@@ -10,7 +10,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import model.LineState;
 import model.Stone;
-
+/**
+ * Main game window class
+ */
 public class GameWin extends JFrame {
   private GameController gameController;
 

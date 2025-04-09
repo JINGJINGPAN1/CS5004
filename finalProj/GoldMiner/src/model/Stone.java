@@ -1,14 +1,29 @@
 package model;
 
 import java.awt.Color;
-
+/**
+ * Class representing a Stone item in the game.
+ * This class extends the Item class and provides specific implementations for stone items.
+ */
 public class Stone extends Item{
+  /**
+   * Constructor to initialize the stone with its position and dimensions.
+   *
+   * @param x      The x-coordinate of the stone.
+   * @param y      The y-coordinate of the stone.
+   * @param width  The width of the stone.
+   * @param height The height of the stone.
+   */
   public Stone(int x, int y, int width, int height) {
     super(x, y, width, height);
   }
 
+  /**
+   * Method to get the score value of the stone based on its dimensions.
+   * @return The score value of the stone.
+   */
   @Override
-  public int getScoreValue(int width, int height) {
+  public int getScoreValue() {
     int baseScore = 10;
     int area = width * height;
     if (area < 1000) {
@@ -20,8 +35,12 @@ public class Stone extends Item{
     }
   }
 
+  /**
+   * Method to compute the retract speed of the stone based on its dimensions.
+   * @return The retract speed of the stone.
+   */
   @Override
-  public double computeRetractSpeed(int width, int height) {
+  public double computeRetractSpeed() {
     double baseRetractSpeed = 5.0;
     int area = width * height;
     if (area < 1000) {
