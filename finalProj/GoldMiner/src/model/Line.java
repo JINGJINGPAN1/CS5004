@@ -26,8 +26,9 @@ public class Line {
   private double BASE_RETRACT_SPEED = 5;
 
   // Reference to whichever Gold/stone object we’re currently carrying (null if none)
-  private Gold grabbedGold = null;
-  private Stone grabbedStone = null;
+//  private Gold grabbedGold = null;
+//  private Stone grabbedStone = null;
+  private Item grabbedItem = null;
 
   public Line(int startX, int startY, int initialLength, int initialDirection, double initialAngleFactor) {
     this.startX = startX;
@@ -92,32 +93,32 @@ public class Line {
       length -= retractSpeed;
 
       // If carrying gold, move it with the line tip
-      if((grabbedGold != null && !grabbedGold.isCollected()) ) {
+      if((grabbedItem != null && !grabbedItem.isCollected()) ) {
         int tipX = getEndX();
         int tipY = getEndY();
 
         // Center the gold on the line tip or offset as needed
-        grabbedGold.setX(tipX - grabbedGold.getWidth() / 2);
-        grabbedGold.setY(tipY - grabbedGold.getHeight() / 2);
+        grabbedItem.setX(tipX - grabbedItem.getWidth() / 2);
+        grabbedItem.setY(tipY - grabbedItem.getHeight() / 2);
       }
       // If carrying stone, move it with the line tip
-      if(grabbedStone != null && !grabbedStone.isCollected()) {
-        int tipX = getEndX();
-        int tipY = getEndY();
-        grabbedStone.setX(tipX - grabbedStone.getWidth() / 2);
-        grabbedStone.setY(tipY - grabbedStone.getHeight() / 2);
-      }
+//      if(grabbedStone != null && !grabbedStone.isCollected()) {
+//        int tipX = getEndX();
+//        int tipY = getEndY();
+//        grabbedStone.setX(tipX - grabbedStone.getWidth() / 2);
+//        grabbedStone.setY(tipY - grabbedStone.getHeight() / 2);
+//      }
 
     } else {
       // Done retracting: if we had a grabbed gold, mark it collected
-      if (grabbedGold != null) {
-        grabbedGold.setCollected(true); // or move it off-screen
-        grabbedGold = null;
+      if (grabbedItem != null) {
+        grabbedItem.setCollected(true); // or move it off-screen
+        grabbedItem = null;
       }
 
-      if (grabbedStone != null) {
-        grabbedStone.setCollected(true);
-        grabbedStone = null;
+      if (grabbedItem != null) {
+        grabbedItem.setCollected(true);
+        grabbedItem = null;
       }
       setLineState(LineState.SWING);
     }
@@ -125,38 +126,39 @@ public class Line {
 
   private double calculateRetractSpeed() {
     // if carrying gold, slow down or speed up based on gold size
-    if(grabbedGold != null) {
-      return computeSpeedForGoldSize(grabbedGold.getWidth(), grabbedGold.getHeight());
+    if(grabbedItem != null) {
+//      return computeSpeedForGoldSize(grabbedItem.getWidth(), grabbedItem.getHeight());
+      return grabbedItem.computeSpeedForGoldSize(grabbedItem.getWidth(), grabbedItem.getHeight());
     }
 
     // if carrying gold, slow down or speed up based on stone size
-    if(grabbedStone != null) {
-      return computeSpeedForStoneSize(grabbedStone.getWidth(), grabbedStone.getHeight());
-    }
+//    if(grabbedStone != null) {
+//      return computeSpeedForStoneSize(grabbedStone.getWidth(), grabbedStone.getHeight());
+//    }
     return BASE_RETRACT_SPEED;
   }
 
-  private double computeSpeedForGoldSize(int width, int height) {
-    int area = width * height;
-    if(area < 1000) {
-      return BASE_RETRACT_SPEED;
-    }else if(area < 4000){
-      return BASE_RETRACT_SPEED * 0.9;
-    }else{
-      return BASE_RETRACT_SPEED * 0.7;
-    }
-  }
+//  private double computeSpeedForGoldSize(int width, int height) {
+//    int area = width * height;
+//    if(area < 1000) {
+//      return BASE_RETRACT_SPEED;
+//    }else if(area < 4000){
+//      return BASE_RETRACT_SPEED * 0.9;
+//    }else{
+//      return BASE_RETRACT_SPEED * 0.7;
+//    }
+//  }
 
-  private double computeSpeedForStoneSize(int width, int height) {
-    int area = width * height;
-    if(area < 1000) {
-      return BASE_RETRACT_SPEED * 0.5;
-    }else if(area < 4000){
-      return BASE_RETRACT_SPEED * 0.2;
-    }else{
-      return BASE_RETRACT_SPEED * 0.1;
-    }
-  }
+//  private double computeSpeedForStoneSize(int width, int height) {
+//    int area = width * height;
+//    if(area < 1000) {
+//      return BASE_RETRACT_SPEED * 0.5;
+//    }else if(area < 4000){
+//      return BASE_RETRACT_SPEED * 0.2;
+//    }else{
+//      return BASE_RETRACT_SPEED * 0.1;
+//    }
+//  }
 
   // endpoint of X
   public int getEndX() {
@@ -220,18 +222,24 @@ public class Line {
   }
 
   // Gold getter/setter
-  public Gold getGrabbedGold() {
-    return grabbedGold;
+//  public Gold getGrabbedGold() {
+//    return grabbedGold;
+//  }
+//  public void setGrabbedGold(Gold grabbedGold) {
+//    this.grabbedGold = grabbedGold;
+//  }
+//
+//  public Stone getGrabbedStone() {
+//    return grabbedStone;
+//  }
+//
+//  public void setGrabbedStone(Stone grabbedStone) {
+//    this.grabbedStone = grabbedStone;
+//  }
+  public Item getGrabbedItem() {
+    return grabbedItem;
   }
-  public void setGrabbedGold(Gold grabbedGold) {
-    this.grabbedGold = grabbedGold;
-  }
-
-  public Stone getGrabbedStone() {
-    return grabbedStone;
-  }
-
-  public void setGrabbedStone(Stone grabbedStone) {
-    this.grabbedStone = grabbedStone;
+  public void setGrabbedItem(Item grabbedItem) {
+    this.grabbedItem = grabbedItem;
   }
 }

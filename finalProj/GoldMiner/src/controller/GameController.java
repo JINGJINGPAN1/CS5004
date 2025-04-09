@@ -3,6 +3,7 @@ package controller;
 import java.util.Random;
 import model.GameTimer;
 import model.Gold;
+import model.Item;
 import model.Line;
 import model.LineState;
 import java.util.ArrayList;
@@ -19,43 +20,54 @@ public class GameController {
   private final Score score;
   private GameTimer gameTimer;
   private boolean gameOver = false;
+  private List<Item> itemList;
 
-public GameController() {
-  random = new Random();
+  public GameController() {
+    random = new Random();
 
-  // Initialize the line
-  line = new Line(300, 180, 50, 1, 0.5);
+    // Initialize the line
+    line = new Line(300, 180, 50, 1, 0.5);
 
-  // Initialize BOTH lists first
-  goldList = new ArrayList<>();
-  stoneList = new ArrayList<>();
+    // Initialize BOTH lists first
+//    goldList = new ArrayList<>();
+//    stoneList = new ArrayList<>();
 
-  // Initialize the Score
-  score = new Score();
+    // Now produce gold (stoneList is not null anymore)
+//
+    itemList = new ArrayList<>();
+    generateGold(5);
+    generateStone(5);
 
-  // Initialize the game timer
-  gameTimer = new GameTimer(30.0);
+    // Initialize the Score
+    score = new Score();
+    // Initialize the game timer
+    gameTimer = new GameTimer(10.0);
 
-  // Now produce gold (stoneList is not null anymore)
-  for(int i = 0; i < 5; i++){
-    int rand_num = random.nextInt(71);
-    int w = 30 + rand_num;
-    int h = 30 + rand_num;
-
-    int[] pos = generateNonOverlapPosition(w, h);
-    goldList.add(new Gold(pos[0], pos[1], w, h));
   }
 
-  // Then produce stone
-  for(int i = 0; i < 5; i++){
-    int rand_num = random.nextInt(71);
-    int w = 30 + rand_num;
-    int h = 30 + rand_num;
+  public void generateGold(int amount){
+    for(int i = 0; i < amount; i++){
+      int rand_num = random.nextInt(71);
+      int w = 30 + rand_num;
+      int h = 30 + rand_num;
 
-    int[] pos = generateNonOverlapPosition(w, h);
-    stoneList.add(new Stone(pos[0], pos[1], w, h));
+      int[] pos = generateNonOverlapPosition(w, h);
+      itemList.add(new Gold(pos[0], pos[1], w, h));
+    }
   }
-}
+
+  public void generateStone(int amount){
+    for(int i = 0; i < amount; i++){
+      int rand_num = random.nextInt(71);
+      int w = 30 + rand_num;
+      int h = 30 + rand_num;
+
+      int[] pos = generateNonOverlapPosition(w, h);
+      itemList.add(new Stone(pos[0], pos[1], w, h));
+    }
+  }
+
+
 
   private int[] generateNonOverlapPosition(int w, int h) {
     // gameWindow 768 * 1000
@@ -77,14 +89,19 @@ public GameController() {
   }
 
   private boolean isOverlapped(int x, int y, int w, int h) {
-    for(Gold gold : goldList){
-      if(isRectOverlap(x, y, w, h, gold.getX(), gold.getY(), gold.getWidth(), gold.getHeight())){
-        return true;
-      }
-    }
-
-    for(Stone stone : stoneList){
-      if(isRectOverlap(x, y, w, h, stone.getX(), stone.getY(), stone.getWidth(), stone.getHeight())){
+//    for(Gold gold : goldList){
+//      if(isRectOverlap(x, y, w, h, gold.getX(), gold.getY(), gold.getWidth(), gold.getHeight())){
+//        return true;
+//      }
+//    }
+//
+//    for(Stone stone : stoneList){
+//      if(isRectOverlap(x, y, w, h, stone.getX(), stone.getY(), stone.getWidth(), stone.getHeight())){
+//        return true;
+//      }
+//    }
+    for(Item item : itemList){
+      if(isRectOverlap(x, y, w, h, item.getX(), item.getY(), item.getWidth(), item.getHeight())){
         return true;
       }
     }
@@ -126,7 +143,10 @@ public GameController() {
     }
     // 1) Check collision only if the line isn't already carrying something
     //    (meaning both grabbedGold and grabbedStone are null).
-    if (line.getGrabbedGold() == null && line.getGrabbedStone() == null) {
+//    if (line.getGrabbedGold() == null && line.getGrabbedStone() == null) {
+//      checkCollision();
+//    }
+    if (line.getGrabbedItem() == null) {
       checkCollision();
     }
     // 2) Update the line each frame
@@ -138,42 +158,63 @@ public GameController() {
   private void checkCollision() {
     // If line is swinging or grabbing outward, we can check collision
     // In your game logic, you might only check collision in certain states
+//    if (line.getLineState() == LineState.SWING || line.getLineState() == LineState.GRAB) {
+//      int tipX = line.getEndX();
+//      int tipY = line.getEndY();
+//
+//      for (Gold gold : goldList) {
+//        if (!gold.isCollected() && isColliding(tipX, tipY, gold)) {
+//          // We have collision
+//          System.out.println("Collision detected with a gold piece!");
+//          // Let the line hold this gold
+//          line.setGrabbedGold(gold);
+//          // Switch line to RETRACT immediately
+//          line.setLineState(LineState.RETRACT);
+//          // Break so we only grab one gold at a time
+//          break;
+//        }
+//      }
+//
+//      for(Stone stone : stoneList) {
+//        if(!stone.isCollected() && isColliding(tipX, tipY, stone)) {
+//          System.out.println("Collision detected with a stone piece!");
+//          line.setGrabbedStone(stone);
+//          line.setLineState(LineState.RETRACT);
+//          break;
+//        }
+//      }
+//    }
     if (line.getLineState() == LineState.SWING || line.getLineState() == LineState.GRAB) {
       int tipX = line.getEndX();
       int tipY = line.getEndY();
 
-      for (Gold gold : goldList) {
-        if (!gold.isCollected() && isColliding(tipX, tipY, gold)) {
+      for (Item item : itemList) {
+        if (!item.isCollected() && isColliding(tipX, tipY, item)) {
           // We have collision
           System.out.println("Collision detected with a gold piece!");
           // Let the line hold this gold
-          line.setGrabbedGold(gold);
+          line.setGrabbedItem(item);
           // Switch line to RETRACT immediately
           line.setLineState(LineState.RETRACT);
           // Break so we only grab one gold at a time
           break;
         }
       }
-
-      for(Stone stone : stoneList) {
-        if(!stone.isCollected() && isColliding(tipX, tipY, stone)) {
-          System.out.println("Collision detected with a stone piece!");
-          line.setGrabbedStone(stone);
-          line.setLineState(LineState.RETRACT);
-          break;
-        }
-      }
     }
   }
 
-  private boolean isColliding(int x, int y, Gold gold) {
-    return x > gold.getX() && x < gold.getX() + gold.getWidth()
-        && y > gold.getY() && y < gold.getY() + gold.getHeight();
-  }
-
-  private boolean isColliding(int x, int y, Stone stone) {
-    return x > stone.getX() && x < stone.getX() + stone.getWidth()
-        && y > stone.getY() && y < stone.getY() + stone.getHeight();
+//  private boolean isColliding(int x, int y, Gold gold) {
+//    return x > gold.getX() && x < gold.getX() + gold.getWidth()
+//        && y > gold.getY() && y < gold.getY() + gold.getHeight();
+//  }
+//
+//  private boolean isColliding(int x, int y, Stone stone) {
+//    return x > stone.getX() && x < stone.getX() + stone.getWidth()
+//        && y > stone.getY() && y < stone.getY() + stone.getHeight();
+//  }
+  private boolean isColliding(int x, int y, Item item) {
+    return x > item.getX() && x < item.getX() + item.getWidth()
+        && y > item.getY() && y < item.getY() + item.getHeight();
   }
   
   private void removeCollectedItems() {
