@@ -12,18 +12,18 @@ public class Line {
   // line state
   private LineState lineState = LineState.SWING;
 
-  // swing angle factor range
+  // Constants for swing behavior
   private static final double MIN_ANGLE = 0.01;
   private static final double MAX_ANGLE = 0.99;
   private static final double ANGLE_STEP = 0.005;
 
-  // retractable range
+  // Constants for retractable range
   private static final int MIN_LENGTH = 50;
   private static final int MAX_LENGTH = 1000;
   private static final int DELTA_LENGTH = 10;
 
   // base retract speed
-  private double BASE_RETRACT_SPEED = 5;
+  private double BASE_RETRACT_SPEED = 5.0;
 
   // Reference to whichever Gold/stone object we’re currently carrying (null if none)
 //  private Gold grabbedGold = null;
@@ -87,7 +87,9 @@ public class Line {
   // retract
   private void retract() {
     // figure out how fast we should retract
-    double retractSpeed = calculateRetractSpeed();
+    double retractSpeed = (grabbedItem != null)
+        ? grabbedItem.computeRetractSpeed(grabbedItem.getWidth(), grabbedItem.getHeight())
+        : BASE_RETRACT_SPEED;
 
     if (length > MIN_LENGTH) {
       length -= retractSpeed;
@@ -115,28 +117,23 @@ public class Line {
         grabbedItem.setCollected(true); // or move it off-screen
         grabbedItem = null;
       }
-
-      if (grabbedItem != null) {
-        grabbedItem.setCollected(true);
-        grabbedItem = null;
-      }
       setLineState(LineState.SWING);
     }
   }
 
-  private double calculateRetractSpeed() {
-    // if carrying gold, slow down or speed up based on gold size
-    if(grabbedItem != null) {
-//      return computeSpeedForGoldSize(grabbedItem.getWidth(), grabbedItem.getHeight());
-      return grabbedItem.computeSpeedForGoldSize(grabbedItem.getWidth(), grabbedItem.getHeight());
-    }
+//  private double calculateRetractSpeed() {
+//    // if carrying gold, slow down or speed up based on gold size
+//    if(grabbedItem != null) {
+////      return computeSpeedForGoldSize(grabbedItem.getWidth(), grabbedItem.getHeight());
+//      return grabbedItem.computeSpeedForGoldSize(grabbedItem.getWidth(), grabbedItem.getHeight());
+//    }
 
     // if carrying gold, slow down or speed up based on stone size
 //    if(grabbedStone != null) {
 //      return computeSpeedForStoneSize(grabbedStone.getWidth(), grabbedStone.getHeight());
 //    }
-    return BASE_RETRACT_SPEED;
-  }
+//    return BASE_RETRACT_SPEED;
+//  }
 
 //  private double computeSpeedForGoldSize(int width, int height) {
 //    int area = width * height;

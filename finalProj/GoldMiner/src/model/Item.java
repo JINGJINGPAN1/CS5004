@@ -37,5 +37,5 @@ public abstract class Item {
   // If you have different logic for gold vs. stone,
   // you can define an abstract method or override in child classes:
   public abstract int getScoreValue(int width, int height);
-  public abstract int computeSpeedForGoldSize(int width, int height);
+  public abstract double computeRetractSpeed(int width, int height);
 }

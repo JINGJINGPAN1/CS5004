@@ -7,28 +7,27 @@ public class Gold extends Item {
 
   @Override
   public int getScoreValue(int width, int height) {
-    int area = width * height;
     int baseScore = 50;
-    if(area < 1000) {
+    int area = width * height;
+    if (area < 1000) {
       return baseScore;
-    }else if(area < 4000){
+    } else if (area < 4000) {
       return baseScore * 2;
-    }else{
+    } else {
       return baseScore * 5;
     }
   }
 
   @Override
-  public int computeSpeedForGoldSize(int width, int height) {
-    int BASE_RETRACT_SPEED = 5;
+  public double computeRetractSpeed(int width, int height) {
+    double baseRetractSpeed = 5.0;
     int area = width * height;
-    if(area < 1000) {
-      return BASE_RETRACT_SPEED;
-    }else if(area < 4000){
-      BASE_RETRACT_SPEED *= 0.9;
-    }else{
-      BASE_RETRACT_SPEED *= 0.7;
+    if (area < 1000) {
+      return baseRetractSpeed;
+    } else if (area < 4000) {
+      return baseRetractSpeed * 0.9;
+    } else {
+      return baseRetractSpeed * 0.7;
     }
-    return BASE_RETRACT_SPEED;
   }
 }

@@ -4,6 +4,7 @@ import controller.GameController;
 import java.awt.Graphics;
 import javax.swing.JPanel;
 import model.GameTimer;
+import model.Item;
 
 /**
  * Responsible for painting models in the Jpanel
@@ -12,23 +13,22 @@ public class GamePanel extends JPanel {
   private GameController gameController;
   private BackgroundView backgroundView;
   private LineView lineView;
-  private GoldView goldView;
-  private StoneView stoneView;
+//  private GoldView goldView;
+//  private StoneView stoneView;
+  private ItemView itemView;
   private ScoreView scoreView;
   private GameTimerView gameTimerView;
 
   public GamePanel(GameController gameController,
       BackgroundView backgroundView,
       LineView lineView,
-      GoldView goldView,
-      StoneView stoneView) {
+      ItemView itemView) {
     this.gameController = gameController;
     this.backgroundView = backgroundView;
     this.lineView = lineView;
-    this.goldView = goldView;
-    this.stoneView = stoneView;
     this.scoreView = new ScoreView(gameController.getScore());
     this.gameTimerView = new GameTimerView(gameController.getGameTimer());
+    this.itemView = itemView;
     setDoubleBuffered(true);  // use double buffering to prevent flickering when updating the display
   }
 
@@ -44,13 +44,17 @@ public class GamePanel extends JPanel {
       lineView.draw(g);
     }
     // paint gold
-    if (goldView != null) {
-      goldView.draw(g);
-    }
+//    if (goldView != null) {
+//      goldView.draw(g);
+//    }
+//
+//    // paint stone
+//    if (stoneView != null) {
+//      stoneView.draw(g);
+//    }
 
-    // paint stone
-    if (stoneView != null) {
-      stoneView.draw(g);
+    if (itemView != null) {
+      itemView.draw(g);
     }
 
     if (scoreView != null) {
@@ -60,5 +64,12 @@ public class GamePanel extends JPanel {
     if (gameTimerView != null) {
       gameTimerView.draw(g);
     }
+
+    // paint the latest list
+    itemView.setItemList(gameController.getItemList());
+    
+    itemView.draw(g);
+
+
   }
 }

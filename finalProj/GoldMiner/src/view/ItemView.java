@@ -15,20 +15,24 @@ public class ItemView {
 
   public ItemView(List<Item> itemList) {
     this.itemList = itemList;
-    goldImg = ResourceLoader.loadImage("imgs/gold0.png");
-    stoneImg = ResourceLoader.loadImage("imgs/stone.png");
+    goldImg = ResourceLoader.loadImage("resources/imgs/gold0.gif");
+    stoneImg = ResourceLoader.loadImage("resources/imgs/rock1.png");
   }
 
   public void draw(Graphics g) {
     for (Item item : itemList) {
       if (!item.isCollected()) {
-        if (item instanceof Gold) {
+        if (item instanceof Gold && goldImg != null) {
           g.drawImage(goldImg, item.getX(), item.getY(), item.getWidth(), item.getHeight(), null);
-        } else if (item instanceof Stone) {
+        } else if (item instanceof Stone && stoneImg != null) {
           g.drawImage(stoneImg, item.getX(), item.getY(), item.getWidth(), item.getHeight(), null);
         }
       }
     }
+  }
+
+  public void setItemList(List<Item> itemList) {
+    this.itemList = itemList;
   }
 }
 

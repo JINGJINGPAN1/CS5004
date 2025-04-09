@@ -15,8 +15,6 @@ import model.Stone;
 public class GameController {
   private Random random;
   private Line line;
-  private List<Gold> goldList;
-  private List<Stone> stoneList;
   private final Score score;
   private GameTimer gameTimer;
   private boolean gameOver = false;
@@ -41,7 +39,7 @@ public class GameController {
     // Initialize the Score
     score = new Score();
     // Initialize the game timer
-    gameTimer = new GameTimer(10.0);
+    gameTimer = new GameTimer(20.0);
 
   }
 
@@ -191,7 +189,7 @@ public class GameController {
       for (Item item : itemList) {
         if (!item.isCollected() && isColliding(tipX, tipY, item)) {
           // We have collision
-          System.out.println("Collision detected with a gold piece!");
+          System.out.println("Collision detected with an item!");
           // Let the line hold this gold
           line.setGrabbedItem(item);
           // Switch line to RETRACT immediately
@@ -220,56 +218,58 @@ public class GameController {
   private void removeCollectedItems() {
     // Optionally remove any gold that isCollected from the list,
     // so it's no longer drawn or processed.
-    Iterator<Gold> iterator = goldList.iterator();
+//    Iterator<Gold> iterator = goldList.iterator();
+//    while (iterator.hasNext()) {
+//      Gold gold = iterator.next();
+//      if (gold.isCollected()) {
+//
+//        // add points for the gold
+//        score.addPoints(computeGoldPoints(gold));
+//        iterator.remove();
+//      }
+//    }
+//
+//    Iterator<Stone> iterator1 = stoneList.iterator();
+//    while (iterator1.hasNext()) {
+//      Stone stone = iterator1.next();
+//      if (stone.isCollected()) {
+//        score.addPoints(computeStonePoints(stone));
+//        iterator1.remove();
+//      }
+//    }
+    Iterator<Item> iterator = itemList.iterator();
     while (iterator.hasNext()) {
-      Gold gold = iterator.next();
-      if (gold.isCollected()) {
-
-        // add points for the gold
-        score.addPoints(computeGoldPoints(gold));
+      Item item = iterator.next();
+      if (item.isCollected()) {
+        // Add points based on item type
+        if (item instanceof Gold) {
+          score.addPoints(item.getScoreValue(item.getWidth(), item.getHeight()));
+        } else if (item instanceof Stone) {
+          score.addPoints(item.getScoreValue(item.getWidth(), item.getHeight()));
+        }
+        // Remove the item from the list so it is no longer drawn or processed.
         iterator.remove();
       }
-    }
-
-    Iterator<Stone> iterator1 = stoneList.iterator();
-    while (iterator1.hasNext()) {
-      Stone stone = iterator1.next();
-      if (stone.isCollected()) {
-        score.addPoints(computeStonePoints(stone));
-        iterator1.remove();
-      }
-    }
-  }
-
-  private int computeStonePoints(Stone stone) {
-    int area = stone.getWidth() * stone.getHeight();
-    int baseScore = 10;
-    if(area < 1000) {
-      return baseScore;
-    }else if(area < 4000){
-      return baseScore * 2;
-    }else{
-      return baseScore * 5;
-    }
-  }
-
-  private int computeGoldPoints(Gold gold) {
-    int area = gold.getWidth() * gold.getHeight();
-    int baseScore = 50;
-    if(area < 1000) {
-      return baseScore;
-    }else if(area < 4000){
-      return baseScore * 2;
-    }else{
-      return baseScore * 5;
     }
   }
 
   // For the View
   public List<Gold> getGoldList() {
+    List<Gold> goldList = new ArrayList<>();
+    for (Item item : itemList) {
+      if (item instanceof Gold) {
+        goldList.add((Gold) item);
+      }
+    }
     return goldList;
   }
   public List<Stone> getStoneList() {
+    List<Stone> stoneList = new ArrayList<>();
+    for (Item item : itemList) {
+      if(item instanceof Stone) {
+        stoneList.add((Stone) item);
+      }
+    }
     return stoneList;
   }
 
@@ -282,12 +282,16 @@ public class GameController {
     line.startGrabbing();
   }
 
-  public void startRetracting() {
-    line.startRetracting();
-  }
+//  public void startRetracting() {
+//    line.startRetracting();
+//  }
 
   public Score getScore() {
     System.out.println("Current score: " + score);
     return score;
+  }
+
+  public List<Item> getItemList() {
+    return itemList;
   }
 }
