@@ -7,12 +7,12 @@ import model.GameTimer;
 import model.Item;
 
 /**
- * Responsible for painting models in the Jpanel
+ * Main game panel that contains all the views.
  */
 public class GamePanel extends JPanel {
-  private GameController gameController;
-  private BackgroundView backgroundView;
-  private LineView lineView;
+  private GameController gameController; // the controller that manages the game logic
+  private BackgroundView backgroundView; // the background view
+  private LineView lineView; // the line view
 //  private GoldView goldView;
 //  private StoneView stoneView;
   private ItemView itemView;
@@ -20,6 +20,14 @@ public class GamePanel extends JPanel {
   private GameTimerView gameTimerView;
   private LevelView levelView;
 
+
+  /**
+   * Constructor for the GamePanel.
+   * @param gameController the controller that manages the game logic
+   * @param backgroundView the background view
+   * @param lineView the line view
+   * @param itemView the item view
+   */
   public GamePanel(GameController gameController,
       BackgroundView backgroundView,
       LineView lineView,
@@ -35,6 +43,9 @@ public class GamePanel extends JPanel {
     setDoubleBuffered(true);  // use double buffering to prevent flickering when updating the display
   }
 
+  /**
+   * Update the game state and repaint the panel.
+   */
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);

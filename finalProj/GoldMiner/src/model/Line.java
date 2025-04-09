@@ -93,7 +93,7 @@ public class Line {
   // Retract behavior: shorten the line while moving the grabbed item if exists
   private void retract() {
     double retractSpeed = (grabbedItem != null)
-        ? grabbedItem.computeRetractSpeed(grabbedItem.getWidth(), grabbedItem.getHeight())
+        ? grabbedItem.computeRetractSpeed()
         : BASE_RETRACT_SPEED;
 
     if (length > MIN_LENGTH) {
