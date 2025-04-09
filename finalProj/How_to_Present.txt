@@ -1,0 +1,13 @@
+How to Present
+
+
+1. Keep it Simple and Clear
+
+
+Pat Winston tells us that using clear and simple language and pictures is very important when speaking in public. When I present my Gold Miner project, I will not use too many technical details or very busy slides. I will focus on a few main points, like how the game works, how users play, and the design choices I made. I will use easy diagrams and screenshots to show these points. This way, my audience can quickly understand Gold Miner without being confused by hard words.
+
+
+2. Engage Your Audience with a Story
+
+
+Winston also advises us to speak in a friendly way and tell a story that connects with the audience. In my final project, I will share the story of how Gold Miner changed over time. I will start with my first ideas, talk about the challenges I met during the project, and explain how I fixed these problems with tests and feedback. By telling this journey, I hope my presentation will be interesting and easier to remember for everyone.
