@@ -10,7 +10,6 @@ public class Gold extends Item {
   //
 
   /**
-<<<<<<< Updated upstream
    * Method to get the score value based on the dimensions of the gold item.
    * @return The score value based on the dimensions.
    */
@@ -42,13 +41,11 @@ public class Gold extends Item {
     } else {
       return baseRetractSpeed * 0.7;
     }
-=======
-   * Getter of x
-   * @return x
-   */
-  public int getX() {
-    return x;
   }
+
+    public int getX() {
+      return x;
+    }
 
   /**
    * Setter of x
@@ -93,6 +90,5 @@ public class Gold extends Item {
 
   public void setCollected(boolean collected) {
     this.collected = collected;
->>>>>>> Stashed changes
   }
 }

@@ -1,6 +1,7 @@
 package view;
 
 import controller.GameController;
+import java.awt.CardLayout;
 import java.util.List;
 import model.Gold;
 import model.Item;
@@ -10,42 +11,110 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import model.LineState;
 import model.Stone;
-/**
- * Main game window class
- */
-public class GameWin extends JFrame {
+
+public class GameWin extends JFrame implements StartScreen.StartScreenListener, GameOverScreen.GameOverListener {
   private GameController gameController;
 
-  // Initialize all the views in the game window
+  // Views
   private BackgroundView backgroundView;
   private LineView lineView;
-//  private GoldView goldView;
-//  private StoneView stoneView;
   private ItemView itemView;
   private GamePanel gamePanel;
+  private StartScreen startScreen;
+  private GameOverScreen gameOverScreen;
+
+  private JPanel mainPanel;  // container for different views
+  private CardLayout cardLayout;
+
+  // Use a single timer and keep a reference to it so we can stop it when needed.
+  private javax.swing.Timer gameLoopTimer;
 
   public GameWin() {
-    // initialize Controller
-    this.gameController = new GameController();
-
-    // get models from controller
-    Line line = gameController.getLine();
-//    List<Gold> goldList = gameController.getGoldList();
-//    List<Stone> stoneList = gameController.getStoneList();
-    List<Item> itemList = gameController.getItemList();
-
-    // initialize all the view
+    // Initialize the controller and views
+    gameController = new GameController();
     backgroundView = new BackgroundView();
+    Line line = gameController.getLine();
     lineView = new LineView(line);
-//    goldView = new GoldView(goldList);
-//    stoneView = new StoneView(stoneList);
+    List<Item> itemList = gameController.getItemList();
     itemView = new ItemView(itemList);
-
-    // put all the views on game panel
     gamePanel = new GamePanel(gameController, backgroundView, lineView, itemView);
 
-    // add panel to game window
-    add(gamePanel);
+    // Initialize StartScreen and GameOverScreen with listeners.
+    startScreen = new StartScreen(this);
+    gameOverScreen = new GameOverScreen(this);
+
+    // Setup CardLayout to switch views.
+    cardLayout = new CardLayout();
+    mainPanel = new JPanel(cardLayout);
+    mainPanel.add(startScreen, "START");
+    mainPanel.add(gamePanel, "GAME");
+    mainPanel.add(gameOverScreen, "GAMEOVER");
+
+    add(mainPanel);
+
+    // Set mouse listener on gamePanel for game actions.
+    gamePanel.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        // Only allow grabbing if the line is in SWING or GRAB state.
+        if (e.getButton() == MouseEvent.BUTTON1) {
+          if (gameController.getLine().getLineState() == LineState.GRAB ||
+              gameController.getLine().getLineState() == LineState.SWING) {
+            gameController.startGrabbing();
+          } else {
+            System.out.println("Cannot grab now, line is retracting.");
+          }
+        }
+      }
+    });
+  }
+
+  /**
+   * This method is called when the user clicks the "Start" button on the start screen.
+   */
+  @Override
+  public void onStartClicked() {
+    // Reset the game state every time Start is clicked.
+    gameController.resetGame();
+    // Show the game panel.
+    cardLayout.show(mainPanel, "GAME");
+    // Start the game loop.
+    startGameLoop();
+  }
+
+  /**
+   * Starts the game loop timer.
+   */
+  private void startGameLoop() {
+    // Create and assign the timer to a member variable.
+    gameLoopTimer = new javax.swing.Timer(16, e -> {
+      gameController.update();
+
+      // When game over is detected, stop the timer and switch to GameOverScreen.
+      if (gameController.isGameOver()) {
+        gameLoopTimer.stop();
+        gameOverScreen.updateScoreAndLevel(gameController.getScore(), gameController.getLevel());
+        cardLayout.show(mainPanel, "GAMEOVER");
+        gameLoopTimer.stop();
+      }
+      repaint();
+    });
+    gameLoopTimer.start();
+  }
+
+  @Override
+  public void onRestartClicked() {
+    // Restart the game: reset game state and switch to game panel.
+    gameController.resetGame();
+    cardLayout.show(mainPanel, "GAME");
+    // Restart the game loop timer.
+    startGameLoop();
+  }
+
+  @Override
+  public void onReturnToMenuClicked() {
+    // Return to the start screen.
+    cardLayout.show(mainPanel, "START");
   }
 
   public void launch() {
@@ -56,31 +125,7 @@ public class GameWin extends JFrame {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setVisible(true);
 
-    // mouse listening: left->grab
-    addMouseListener(new MouseAdapter() {
-      @Override
-      public void mouseClicked(MouseEvent e) {
-        super.mouseClicked(e);
-        if (e.getButton() == MouseEvent.BUTTON1) {
-          // Only allow grabbing if line is in Swing or Grab
-          if(gameController.getLine().getLineState() == LineState.GRAB ||
-          gameController.getLine().getLineState() == LineState.SWING){
-            // game controller to start grabbing
-            gameController.startGrabbing();
-          }else{
-            System.out.println("Cannot grab now, line is retracting.");
-          }
-        }
-      }
-    });
-
-    // set a clock: update every 16 seconds
-    Timer timer = new Timer(16, e -> {
-      // controller to update
-      gameController.update();
-      // repaint
-      repaint();
-    });
-    timer.start();
+    // Initially show the start screen.
+    cardLayout.show(mainPanel, "START");
   }
 }

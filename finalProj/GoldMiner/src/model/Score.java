@@ -33,7 +33,7 @@ public class Score {
    * Method to reset the score to zero.
    */
   public void reset() {
-    this.currentScore = 0;
+    currentScore = 0;
   }
 
 }

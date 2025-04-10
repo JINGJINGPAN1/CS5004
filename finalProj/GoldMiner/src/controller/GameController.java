@@ -1,6 +1,8 @@
 package controller;
 
 import java.util.Random;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import model.GameTimer;
 import model.Gold;
 import model.Item;
@@ -16,9 +18,10 @@ import model.Stone;
 public class GameController {
   private Random random;
   private Line line;
-  private final Score score;
+  private Score score;
   private GameTimer gameTimer;
   private boolean gameOver = false;
+  private boolean gamePaused = false;
   private List<Item> itemList;
   private Level level;
 
@@ -27,21 +30,15 @@ public class GameController {
 
     // Initialize the line
     line = new Line(300, 180, 50, 1, 0.5);
-
-    // Initialize BOTH lists first
-//    goldList = new ArrayList<>();
-//    stoneList = new ArrayList<>();
-
-    // Now produce gold (stoneList is not null anymore)
-//
+    // Initialize the item list
     itemList = new ArrayList<>();
     generateGold(5);
     generateStone(5);
-
     // Initialize the Score
     score = new Score();
     // Initialize the game timer
     gameTimer = new GameTimer(10.0);
+    // Initialize the level
     level = new Level();
 
   }
@@ -69,7 +66,7 @@ public class GameController {
   }
 
   private int[] generateNonOverlapPosition(int w, int h) {
-    // gameWindow 768 * 1000
+    // gameWindow 600 * 800
     int maxX = 600;
     int minY = 200;
     int maxY = 800;
@@ -88,17 +85,6 @@ public class GameController {
   }
 
   private boolean isOverlapped(int x, int y, int w, int h) {
-//    for(Gold gold : goldList){
-//      if(isRectOverlap(x, y, w, h, gold.getX(), gold.getY(), gold.getWidth(), gold.getHeight())){
-//        return true;
-//      }
-//    }
-//
-//    for(Stone stone : stoneList){
-//      if(isRectOverlap(x, y, w, h, stone.getX(), stone.getY(), stone.getWidth(), stone.getHeight())){
-//        return true;
-//      }
-//    }
     for(Item item : itemList){
       if(isRectOverlap(x, y, w, h, item.getX(), item.getY(), item.getWidth(), item.getHeight())){
         return true;
@@ -130,16 +116,16 @@ public class GameController {
   }
 
   public void update() {
-    if(gameOver){
+    if(gameOver || gamePaused){
       return;
     }
     // We approximate each frame as 16 ms => 0.016s
     gameTimer.update(0.016);
     if(gameTimer.isTimeUp()){
       if(level.shouldLevelUp(score.getCurrentScore())){
-//        level.levelUp();
-//        gameTimer.reset(20.0);
-        gotoNextLevel();
+        gamePaused = true;
+        showLevelCompleteDialog();
+        return;
       }else{
         gameOver = true;
         System.out.println("Game Over");
@@ -148,9 +134,6 @@ public class GameController {
     }
     // 1) Check collision only if the line isn't already carrying something
     //    (meaning both grabbedGold and grabbedStone are null).
-//    if (line.getGrabbedGold() == null && line.getGrabbedStone() == null) {
-//      checkCollision();
-//    }
     if (line.getGrabbedItem() == null) {
       checkCollision();
     }
@@ -160,44 +143,64 @@ public class GameController {
     removeCollectedItems();
   }
 
+  private void showLevelCompleteDialog() {
+    SwingUtilities.invokeLater(new Runnable() {
+      public void run() {
+        Object[] options = { "Enter NEXT LEVEL", "RETURN TO GAME" };
+        int option = JOptionPane.showOptionDialog(null,
+            "Congratulations! You have reached the target score.\nWhat would you like to do?",
+            "Level Complete",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            options,
+            options[0]);
+        if(option == JOptionPane.YES_OPTION){
+          gotoNextLevel();
+        }else{
+          resumeGame();
+        }
+      }
+    });
+  }
+
+  private void resumeGame() {
+    gameTimer.reset(10.0);
+    score.reset();
+    level.reset();
+    gameOver = false;
+    gamePaused = false;
+  }
+
+  public void resetGame() {
+    // Reset the game timer to initial time (e.g. 10.0 seconds for a new game)
+    gameTimer.reset(10.0);
+    // Reset the score to 0
+    score.reset();
+    // Reset the level back to initial values
+    level.reset();
+    // Reset the line to its initial state
+    line.reset();
+    // Clear current items and generate new ones
+    itemList.clear();
+    generateGold(5);
+    generateStone(5);
+    // Unpause game, allowing updates to occur
+    gameOver = false;
+  }
+
   private void gotoNextLevel() {
     level.levelUp();
-    gameTimer.reset(15.0);
+    gameTimer.reset(30.0);
     itemList.clear();
     generateGold(6);
     generateStone(6);
     line.reset();
+    gameOver = false;
+    gamePaused = false;
   }
 
   private void checkCollision() {
-    // If line is swinging or grabbing outward, we can check collision
-    // In your game logic, you might only check collision in certain states
-//    if (line.getLineState() == LineState.SWING || line.getLineState() == LineState.GRAB) {
-//      int tipX = line.getEndX();
-//      int tipY = line.getEndY();
-//
-//      for (Gold gold : goldList) {
-//        if (!gold.isCollected() && isColliding(tipX, tipY, gold)) {
-//          // We have collision
-//          System.out.println("Collision detected with a gold piece!");
-//          // Let the line hold this gold
-//          line.setGrabbedGold(gold);
-//          // Switch line to RETRACT immediately
-//          line.setLineState(LineState.RETRACT);
-//          // Break so we only grab one gold at a time
-//          break;
-//        }
-//      }
-//
-//      for(Stone stone : stoneList) {
-//        if(!stone.isCollected() && isColliding(tipX, tipY, stone)) {
-//          System.out.println("Collision detected with a stone piece!");
-//          line.setGrabbedStone(stone);
-//          line.setLineState(LineState.RETRACT);
-//          break;
-//        }
-//      }
-//    }
     if (line.getLineState() == LineState.SWING || line.getLineState() == LineState.GRAB) {
       int tipX = line.getEndX();
       int tipY = line.getEndY();
@@ -217,42 +220,12 @@ public class GameController {
     }
   }
 
-//  private boolean isColliding(int x, int y, Gold gold) {
-//    return x > gold.getX() && x < gold.getX() + gold.getWidth()
-//        && y > gold.getY() && y < gold.getY() + gold.getHeight();
-//  }
-//
-//  private boolean isColliding(int x, int y, Stone stone) {
-//    return x > stone.getX() && x < stone.getX() + stone.getWidth()
-//        && y > stone.getY() && y < stone.getY() + stone.getHeight();
-//  }
   private boolean isColliding(int x, int y, Item item) {
     return x > item.getX() && x < item.getX() + item.getWidth()
         && y > item.getY() && y < item.getY() + item.getHeight();
   }
   
   private void removeCollectedItems() {
-    // Optionally remove any gold that isCollected from the list,
-    // so it's no longer drawn or processed.
-//    Iterator<Gold> iterator = goldList.iterator();
-//    while (iterator.hasNext()) {
-//      Gold gold = iterator.next();
-//      if (gold.isCollected()) {
-//
-//        // add points for the gold
-//        score.addPoints(computeGoldPoints(gold));
-//        iterator.remove();
-//      }
-//    }
-//
-//    Iterator<Stone> iterator1 = stoneList.iterator();
-//    while (iterator1.hasNext()) {
-//      Stone stone = iterator1.next();
-//      if (stone.isCollected()) {
-//        score.addPoints(computeStonePoints(stone));
-//        iterator1.remove();
-//      }
-//    }
     Iterator<Item> iterator = itemList.iterator();
     while (iterator.hasNext()) {
       Item item = iterator.next();
@@ -298,9 +271,9 @@ public class GameController {
     line.startGrabbing();
   }
 
-//  public void startRetracting() {
-//    line.startRetracting();
-//  }
+  public void startRetracting() {
+    line.startRetracting();
+  }
 
   public Score getScore() {
     System.out.println("Current score: " + score);
@@ -313,5 +286,9 @@ public class GameController {
 
   public Level getLevel() {
     return level;
+  }
+
+  public boolean isGamePaused() {
+    return gamePaused;
   }
 }

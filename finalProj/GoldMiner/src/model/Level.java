@@ -4,14 +4,9 @@ public class Level {
   private int currentLevel;
   private int targetScore;
 
-  public Level(int currentLevel, int targetScore) {
-    this.currentLevel = currentLevel;
-    this.targetScore = targetScore;
-  }
-
   public Level(){
     this.currentLevel = 1;
-    this.targetScore = 200;
+    this.targetScore = 100;
   }
 
   public boolean shouldLevelUp(int currentScore){
@@ -36,12 +31,13 @@ public class Level {
     return targetScore;
   }
 
+
   public void setTargetScore(int targetScore) {
     this.targetScore = targetScore;
   }
 
   public void reset() {
     currentLevel = 1;
-    targetScore = 500;
+    targetScore = 100;
   }
 }
