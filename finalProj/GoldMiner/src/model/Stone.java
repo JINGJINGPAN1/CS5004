@@ -24,7 +24,7 @@ public class Stone extends Item{
    */
   @Override
   public int getScoreValue() {
-    int baseScore = 10;
+    int baseScore = 20;
     int area = width * height;
     if (area < 1000) {
       return baseScore;
