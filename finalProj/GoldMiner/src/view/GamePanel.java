@@ -57,15 +57,6 @@ public class GamePanel extends JPanel {
     if (lineView != null) {
       lineView.draw(g);
     }
-    // paint gold
-//    if (goldView != null) {
-//      goldView.draw(g);
-//    }
-//
-//    // paint stone
-//    if (stoneView != null) {
-//      stoneView.draw(g);
-//    }
 
     if (itemView != null) {
       itemView.draw(g);

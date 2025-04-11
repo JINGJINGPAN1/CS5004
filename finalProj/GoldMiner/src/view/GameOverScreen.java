@@ -1,90 +1,99 @@
 package view;
 
-import java.awt.BorderLayout;
 import java.awt.Font;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.image.BufferedImage;
+import javax.swing.*;
+import java.awt.Color;
 import model.Score;
 import model.Level;
+import utils.ResourceLoader;
 
-/**
- * GameOverScreen shows the game over message along with the player's score and level.
- * It provides options to restart the game or return to the start menu.
- */
 public class GameOverScreen extends JPanel {
 
-  public interface GameOverListener {
+  private screenListener listener;
+  private BufferedImage background;
 
-    void onStartClicked();
-
-    // Called when the user clicks to restart the game.
-    void onRestartClicked();
-    // Called when the user chooses to return to the start menu.
-    void onReturnToMenuClicked();
-  }
-
-  private GameOverListener listener;
-  private JLabel gameOverLabel;
   private JLabel scoreLabel;
   private JLabel levelLabel;
-  private JButton restartButton;
-  private JButton returnButton;
 
-  public GameOverScreen(GameOverListener listener) {
+  private JButton restartButton;
+  private JButton exitButton;
+
+  public GameOverScreen(screenListener listener) {
     this.listener = listener;
+    background = ResourceLoader.loadImage("resources/imgs/bg5.png");
+    // GridBagLayout
+    setLayout(new GridBagLayout());
     initializeUI();
   }
 
   private void initializeUI() {
-    setLayout(new BorderLayout());
+    GridBagConstraints gbc = new GridBagConstraints();
+    // gap
+    gbc.insets = new Insets(10, 10, 10, 10);
+    gbc.fill = GridBagConstraints.HORIZONTAL; // horizontally fill
 
-    // Top area: game over message.
-    gameOverLabel = new JLabel("GAME OVER", JLabel.CENTER);
-    gameOverLabel.setFont(new Font("Arial", Font.BOLD, 36));
-    add(gameOverLabel, BorderLayout.NORTH);
+    // scoreLabel
+    scoreLabel = new JLabel("Score: 0");
+    scoreLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 24));
+    scoreLabel.setForeground(Color.WHITE);
+    gbc.gridx = 0;
+    gbc.gridy = 0;
+    add(scoreLabel, gbc);
 
-    // Center area: display score and level.
-    JPanel centerPanel = new JPanel(new BorderLayout());
-    scoreLabel = new JLabel("Score: 0", JLabel.CENTER);
-    scoreLabel.setFont(new Font("Arial", Font.BOLD, 24));
-    levelLabel = new JLabel("Level: 1", JLabel.CENTER);
-    levelLabel.setFont(new Font("Arial", Font.BOLD, 24));
-    centerPanel.add(scoreLabel, BorderLayout.NORTH);
-    centerPanel.add(levelLabel, BorderLayout.SOUTH);
-    add(centerPanel, BorderLayout.CENTER);
+    // levelLabel
+    levelLabel = new JLabel("Level: 0");
+    levelLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 24));
+    levelLabel.setForeground(Color.WHITE);
+    gbc.gridx = 0;
+    gbc.gridy = 1;
+    add(levelLabel, gbc);
 
-    // Bottom area: buttons for restart and return.
-    JPanel buttonPanel = new JPanel();
-    restartButton = new JButton("Restart Game");
-    returnButton = new JButton("Return to Menu");
-    buttonPanel.add(restartButton);
-    buttonPanel.add(returnButton);
-    add(buttonPanel, BorderLayout.SOUTH);
+    // Restart button
+    restartButton = new JButton("Restart");
+    stylizedButton(restartButton);
+    gbc.gridx = 0;
+    gbc.gridy = 2;
+    add(restartButton, gbc);
 
-    // Add button listeners.
+    // Exit button
+    exitButton = new JButton("Exit");
+    stylizedButton(exitButton);
+    gbc.gridx = 0;
+    gbc.gridy = 3;
+    add(exitButton, gbc);
+
+    // click events
     restartButton.addActionListener(e -> {
       if (listener != null) {
-        listener.onRestartClicked();
+        listener.onStartClicked();
       }
     });
 
-    returnButton.addActionListener(e -> {
-      if (listener != null) {
-        listener.onReturnToMenuClicked();
-      }
-    });
+    exitButton.addActionListener(e -> System.exit(0));
   }
 
-  /**
-   * Updates the score and level information displayed.
-   *
-   * @param score the current score
-   * @param level the current level
-   */
+  private void stylizedButton(JButton button) {
+    button.setFont(new Font("Comic Sans MS", Font.BOLD, 24));
+    button.setForeground(Color.WHITE);
+    button.setBorder(BorderFactory.createLineBorder(Color.GRAY, 3));
+    button.setContentAreaFilled(false);
+    button.setOpaque(false);
+    button.setFocusPainted(true);
+  }
+
   public void updateScoreAndLevel(Score score, Level level) {
     scoreLabel.setText("Score: " + score.getCurrentScore());
     levelLabel.setText("Level: " + level.getCurrentLevel());
   }
-}
 
+  @Override
+  protected void paintComponent(Graphics g) {
+    super.paintComponent(g);
+    g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
+  }
+}

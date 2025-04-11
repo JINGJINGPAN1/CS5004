@@ -10,9 +10,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import model.LineState;
 
-public class GameWin extends JFrame implements GameOverScreen.GameOverListener,
-    GameController.LevelCompleteListener,
-    StartScreenListener {
+public class GameWin extends JFrame implements GameController.LevelCompleteListener,
+    screenListener {
   private GameController gameController;
 
   // Views

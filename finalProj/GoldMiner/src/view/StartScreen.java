@@ -3,13 +3,12 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import utils.ResourceLoader;
 
@@ -19,12 +18,12 @@ import utils.ResourceLoader;
  */
 public class StartScreen extends JPanel {
 
-  private StartScreenListener listener;
+  private screenListener listener;
   private BufferedImage background;
 
-  public StartScreen(StartScreenListener listener) {
+  public StartScreen(screenListener listener) {
     this.listener = listener;
-    background = ResourceLoader.loadImage("resources/imgs/bg2.png");
+    background = ResourceLoader.loadImage("resources/imgs/bg4.png");
     initializeUI();
   }
 
@@ -32,14 +31,29 @@ public class StartScreen extends JPanel {
 
     setLayout(new BorderLayout());
 
-    // Start Button
+    // create the buttonPanel where 3 buttons will be placed
+    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+    buttonPanel.setOpaque(false);
+
+    // create Start button
     JButton startButton = new JButton("Start");
-    startButton.setFont(new Font("Comic Sans MS", Font.BOLD, 40));
-    startButton.setPreferredSize(new Dimension(100, 50));
-    startButton.setBorderPainted(false);
-    startButton.setFocusPainted(false);
-    startButton.setForeground(Color.WHITE);
-    add(startButton, BorderLayout.SOUTH);
+    stylizedButton(startButton);
+
+    // create Help button
+    JButton helpButton = new JButton("Help");
+    stylizedButton(helpButton);
+
+    // create Exit button
+    JButton exitButton = new JButton("Exit");
+    stylizedButton(exitButton);
+
+    // 将三个按钮添加到按钮面板中
+    buttonPanel.add(startButton);
+    buttonPanel.add(helpButton);
+    buttonPanel.add(exitButton);
+
+    // 将按钮面板添加到整个页面的底部
+    add(buttonPanel, BorderLayout.SOUTH);
 
     // Button click event: call listener's onStartClicked()
     startButton.addActionListener(e -> {
@@ -47,13 +61,25 @@ public class StartScreen extends JPanel {
         listener.onStartClicked();
       }
     });
+
+    // Exit click event
+    exitButton.addActionListener(e -> {System.exit(0);});
   }
+
+  private void stylizedButton(JButton button) {
+    button.setFont(new Font("Comic Sans MS", Font.BOLD, 24));
+    button.setForeground(Color.WHITE);
+    button.setBorder(BorderFactory.createLineBorder(Color.GRAY, 3));
+    button.setContentAreaFilled(false);
+    button.setOpaque(false);
+    button.setFocusPainted(true);
+    button.setPreferredSize(new Dimension(120, 60));
+  }
+
 
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
-    int width = getWidth();
-    int height = getHeight();
-    g.drawImage(background, 0, 0, width, height, null);
+    g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
   }
 }
