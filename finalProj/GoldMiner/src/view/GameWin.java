@@ -3,16 +3,16 @@ package view;
 import controller.GameController;
 import java.awt.CardLayout;
 import java.util.List;
-import model.Gold;
 import model.Item;
 import model.Line;
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import model.LineState;
-import model.Stone;
 
-public class GameWin extends JFrame implements StartScreen.StartScreenListener, GameOverScreen.GameOverListener {
+public class GameWin extends JFrame implements GameOverScreen.GameOverListener,
+    GameController.LevelCompleteListener,
+    StartScreenListener {
   private GameController gameController;
 
   // Views
@@ -20,14 +20,14 @@ public class GameWin extends JFrame implements StartScreen.StartScreenListener, 
   private LineView lineView;
   private ItemView itemView;
   private GamePanel gamePanel;
-  private StartScreen startScreen;
+  private StartScreen startScreen;      // Changed type to StartScreen
   private GameOverScreen gameOverScreen;
 
   private JPanel mainPanel;  // container for different views
   private CardLayout cardLayout;
 
   // Use a single timer and keep a reference to it so we can stop it when needed.
-  private javax.swing.Timer gameLoopTimer;
+  private Timer gameLoopTimer;
 
   public GameWin() {
     // Initialize the controller and views
@@ -40,6 +40,7 @@ public class GameWin extends JFrame implements StartScreen.StartScreenListener, 
     gamePanel = new GamePanel(gameController, backgroundView, lineView, itemView);
 
     // Initialize StartScreen and GameOverScreen with listeners.
+    // 'this' is passed as the listener because GameWin now implements StartScreenListener.
     startScreen = new StartScreen(this);
     gameOverScreen = new GameOverScreen(this);
 
@@ -93,9 +94,12 @@ public class GameWin extends JFrame implements StartScreen.StartScreenListener, 
       // When game over is detected, stop the timer and switch to GameOverScreen.
       if (gameController.isGameOver()) {
         gameLoopTimer.stop();
-        gameOverScreen.updateScoreAndLevel(gameController.getScore(), gameController.getLevel());
-        cardLayout.show(mainPanel, "GAMEOVER");
-        gameLoopTimer.stop();
+        Timer delayTimer = new Timer(1000, ev -> {
+          gameOverScreen.updateScoreAndLevel(gameController.getScore(), gameController.getLevel());
+          cardLayout.show(mainPanel, "GAMEOVER");
+        });
+        delayTimer.setRepeats(false); // 确保只执行一次
+        delayTimer.start();
       }
       repaint();
     });
@@ -115,6 +119,13 @@ public class GameWin extends JFrame implements StartScreen.StartScreenListener, 
   public void onReturnToMenuClicked() {
     // Return to the start screen.
     cardLayout.show(mainPanel, "START");
+  }
+
+  @Override
+  public void onExitToMenu() {
+    gameController.resetGame();
+    cardLayout.show(mainPanel, "GAME");
+    startGameLoop();
   }
 
   public void launch() {

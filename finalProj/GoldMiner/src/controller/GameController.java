@@ -25,6 +25,15 @@ public class GameController {
   private List<Item> itemList;
   private Level level;
 
+  private LevelCompleteListener levelCompleteListener;
+  public interface LevelCompleteListener {
+    void onExitToMenu();
+  }
+
+  public void setLevelCompleteListener(LevelCompleteListener levelCompleteListener) {
+    this.levelCompleteListener = levelCompleteListener;
+  }
+
   public GameController() {
     random = new Random();
 
@@ -146,7 +155,7 @@ public class GameController {
   private void showLevelCompleteDialog() {
     SwingUtilities.invokeLater(new Runnable() {
       public void run() {
-        Object[] options = { "Enter NEXT LEVEL", "RETURN TO GAME" };
+        Object[] options = { "Enter NEXT LEVEL", "Exit GAME" };
         int option = JOptionPane.showOptionDialog(null,
             "Congratulations! You have reached the target score.\nWhat would you like to do?",
             "Level Complete",
@@ -158,19 +167,14 @@ public class GameController {
         if(option == JOptionPane.YES_OPTION){
           gotoNextLevel();
         }else{
-          resumeGame();
+          if(levelCompleteListener != null){
+            levelCompleteListener.onExitToMenu();
+          }
         }
       }
     });
   }
 
-  private void resumeGame() {
-    gameTimer.reset(10.0);
-    score.reset();
-    level.reset();
-    gameOver = false;
-    gamePaused = false;
-  }
 
   public void resetGame() {
     // Reset the game timer to initial time (e.g. 10.0 seconds for a new game)
