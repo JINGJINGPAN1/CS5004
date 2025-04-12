@@ -26,8 +26,8 @@ public class ScoreView {
   public void draw(Graphics g) {
     int currentScore = score.getCurrentScore();
     g.setColor(Color.WHITE);
-    g.setFont(new Font("Comic Sans MS", Font.BOLD, 30));
-    g.drawString("Score: " + currentScore, 20, 50);
+    g.setFont(new Font("Comic Sans MS", Font.BOLD, 25));
+    g.drawString("Score: " + currentScore, 20, 70);
   }
 
 }

@@ -2,13 +2,16 @@ package view;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import model.Line;
+import utils.ResourceLoader;
 
 /**
  * LineView is responsible for rendering the line on the screen.
  */
 public class LineView {
   private Line line; // Reference to the Line model
+  private BufferedImage hookImage;
 
   /**
    * Constructor for LineView.
@@ -16,6 +19,7 @@ public class LineView {
    */
   public LineView(Line line) {
     this.line = line;
+    hookImage = ResourceLoader.loadImage("resources/imgs/hook.png");
   }
 
   /**
@@ -26,5 +30,19 @@ public class LineView {
     // paint red line
     g.setColor(Color.RED);
     g.drawLine(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY());
+
+    // calculate the tip of the line
+    int tipX = line.getEndX();
+    int tipY = line.getEndY();
+
+    if(hookImage != null) {
+      int hookWidth = hookImage.getWidth(null);
+      int hookHeight = hookImage.getHeight(null);
+      // center the hook image at the tip.
+      int drawX = tipX - hookWidth / 2;
+      int drawY = tipY - hookHeight / 2;
+      g.drawImage(hookImage, drawX, drawY, null);
+    }
+
   }
 }

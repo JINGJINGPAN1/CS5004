@@ -1,8 +1,6 @@
 package controller;
 
 import java.util.Random;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import model.GameTimer;
 import model.Gold;
 import model.Item;
@@ -226,6 +224,7 @@ public class GameController {
     // Unpause game, allowing updates to occur
     gameOver = false;
     gamePaused = false;
+    levelComplete = false;
   }
 
   public void gotoNextLevel() {

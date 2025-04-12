@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -20,14 +19,23 @@ import javax.swing.SwingConstants;
 import utils.ResourceLoader;
 
 public class LevelCompleteDialog extends JDialog {
-  public BufferedImage displayImage;
+  private BufferedImage displayImage;
+  private JButton nextButton;
+  private JButton quitButton;
+  private JLabel messageLabel;
+  private screenListener listener;
+
 
   public LevelCompleteDialog(JFrame frame, screenListener listener) {
     super(frame, "Level Complete", true);
+    this.listener = listener;
     displayImage = ResourceLoader.loadImage("resources/imgs/display.png");
     setSize(500, 300);
     setLocationRelativeTo(frame);
+    initializeUI();
+  }
 
+  private void initializeUI() {
     JPanel backgroundPanel = new JPanel() {
       @Override
       protected void paintComponent(Graphics g) {
@@ -41,11 +49,10 @@ public class LevelCompleteDialog extends JDialog {
     setContentPane(backgroundPanel);
 
     //message
-    JLabel messageLabel = new JLabel("<html>Congratulations!<br><br>"
-        + "You've reached the target score.<br><br>"
+    messageLabel = new JLabel("<html>Congratulations!<br><br>"
         + "What would you like to do?</html>", SwingConstants.CENTER);
-    messageLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 15));
-    messageLabel.setForeground(Color.BLACK);
+    messageLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
+    messageLabel.setForeground(Color.YELLOW);
 
     GridBagConstraints gbc = new GridBagConstraints();
     gbc.gridx = 0;
@@ -60,9 +67,9 @@ public class LevelCompleteDialog extends JDialog {
     // buttons
     JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
     buttonPanel.setOpaque(false);
-    JButton nextButton = new JButton("Next");
+    nextButton = new JButton("Next");
     stylizedButton(nextButton);
-    JButton quitButton = new JButton("Quit");
+    quitButton = new JButton("Quit");
     stylizedButton(quitButton);
     buttonPanel.add(nextButton);
     buttonPanel.add(quitButton);
