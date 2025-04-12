@@ -19,7 +19,7 @@ public class LineView {
    */
   public LineView(Line line) {
     this.line = line;
-    hookImage = ResourceLoader.loadImage("resources/imgs/hook.png");
+    hookImage = ResourceLoader.loadImage("resources/imgs/hk.png");
   }
 
   /**
@@ -31,13 +31,13 @@ public class LineView {
     g.setColor(Color.RED);
     g.drawLine(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY());
 
-    // calculate the tip of the line
-    int tipX = line.getEndX();
-    int tipY = line.getEndY();
-
     if(hookImage != null) {
       int hookWidth = hookImage.getWidth(null);
       int hookHeight = hookImage.getHeight(null);
+
+      int tipX = line.getEndX();
+      int tipY = line.getEndY();
+
       // center the hook image at the tip.
       int drawX = tipX - hookWidth / 2;
       int drawY = tipY - hookHeight / 2;

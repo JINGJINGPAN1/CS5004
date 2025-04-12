@@ -1,5 +1,7 @@
 package model;
 
+import java.awt.Rectangle;
+
 public class Line {
   // current start coordinates
   private int startX, startY;
@@ -196,5 +198,12 @@ public class Line {
     this.angleFactor = INITIAL_ANGLE_FACTOR;
     this.lineState = LineState.SWING;
     this.grabbedItem = null;
+  }
+
+  public Rectangle getHookBounds() {
+    int hookSize = 30; // Change this value as needed to match the hook image size
+    int tipX = getEndX();
+    int tipY = getEndY();
+    return new Rectangle(tipX - hookSize / 2, tipY - hookSize / 2, hookSize, hookSize);
   }
 }

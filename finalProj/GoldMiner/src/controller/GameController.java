@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.Rectangle;
 import java.util.Random;
 import model.GameTimer;
 import model.Gold;
@@ -139,29 +140,21 @@ public class GameController {
 
   private void checkCollision() {
     if (line.getLineState() == LineState.SWING || line.getLineState() == LineState.GRAB) {
-      int tipX = line.getEndX();
-      int tipY = line.getEndY();
-
+      Rectangle hookBounds = line.getHookBounds();
       for (Item item : itemList) {
-        if (!item.isCollected() && isColliding(tipX, tipY, item)) {
-          // We have collision
-          System.out.println("Collision detected with an item!");
-          // Let the line hold this gold
-          line.setGrabbedItem(item);
-          // Switch line to RETRACT immediately
-          line.setLineState(LineState.RETRACT);
-          // Break so we only grab one gold at a time
-          break;
+        if (!item.isCollected()) {
+          Rectangle itemRect = new Rectangle(item.getX(), item.getY(), item.getWidth(), item.getHeight());
+          if (hookBounds.intersects(itemRect)) {
+            System.out.println("Collision detected with an item!");
+            line.setGrabbedItem(item);
+            line.setLineState(LineState.RETRACT);
+            break;  // Only grab one item at a time.
+          }
         }
       }
     }
   }
 
-  private boolean isColliding(int x, int y, Item item) {
-    return x > item.getX() && x < item.getX() + item.getWidth()
-        && y > item.getY() && y < item.getY() + item.getHeight();
-  }
-  
   private void removeCollectedItems() {
     Iterator<Item> iterator = itemList.iterator();
     while (iterator.hasNext()) {

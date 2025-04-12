@@ -6,7 +6,7 @@ public class Level {
 
   public Level(){
     this.currentLevel = 1;
-    this.targetScore = 100;
+    this.targetScore = 200;
   }
 
   public boolean shouldLevelUp(int currentScore){
@@ -15,7 +15,7 @@ public class Level {
 
   public void levelUp(){
     currentLevel++;
-    targetScore += 100;
+    targetScore += 300;
     System.out.println("Leveled up to Level: "+ currentLevel + "! New target score: " + targetScore);
   }
 
