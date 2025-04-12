@@ -45,11 +45,11 @@ public class StartScreen extends JPanel {
     exitButton = new JButton("Exit");
     stylizedButton(exitButton);
 
-    // 将三个按钮添加到按钮面板中
+    // add two buttons to the button panel
     buttonPanel.add(startButton);
     buttonPanel.add(exitButton);
 
-    // 将按钮面板添加到整个页面的底部
+    // add button panel
     add(buttonPanel, BorderLayout.SOUTH);
 
     // Button click event: call listener's onStartClicked()

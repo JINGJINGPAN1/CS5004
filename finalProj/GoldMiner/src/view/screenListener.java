@@ -6,4 +6,6 @@ public interface screenListener {
   void onRestartClicked();
   // Called when the user chooses to return to the start menu.
   void onReturnToMenuClicked();
+  void onNextLevelClicked();
+  void onExitClicked();
 }

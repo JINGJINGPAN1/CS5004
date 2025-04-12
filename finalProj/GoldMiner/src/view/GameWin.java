@@ -10,8 +10,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import model.LineState;
 
-public class GameWin extends JFrame implements GameController.LevelCompleteListener,
-    screenListener {
+public class GameWin extends JFrame implements screenListener {
   private GameController gameController;
 
   // Views
@@ -90,6 +89,14 @@ public class GameWin extends JFrame implements GameController.LevelCompleteListe
     gameLoopTimer = new javax.swing.Timer(16, e -> {
       gameController.update();
 
+      if(gameController.isLevelComplete()){
+        gameLoopTimer.stop();
+
+        // display popup to next level or not
+        LevelCompleteDialog dialog = new LevelCompleteDialog(this, this);
+        dialog.setVisible(true);
+      }
+
       // When game over is detected, stop the timer and switch to GameOverScreen.
       if (gameController.isGameOver()) {
         gameLoopTimer.stop();
@@ -97,7 +104,7 @@ public class GameWin extends JFrame implements GameController.LevelCompleteListe
           gameOverScreen.updateScoreAndLevel(gameController.getScore(), gameController.getLevel());
           cardLayout.show(mainPanel, "GAMEOVER");
         });
-        delayTimer.setRepeats(false); // 确保只执行一次
+        delayTimer.setRepeats(false);
         delayTimer.start();
       }
       repaint();
@@ -121,7 +128,14 @@ public class GameWin extends JFrame implements GameController.LevelCompleteListe
   }
 
   @Override
-  public void onExitToMenu() {
+  public void onNextLevelClicked() {
+    gameController.gotoNextLevel();
+    cardLayout.show(mainPanel, "GAME");
+    startGameLoop();
+  }
+
+  @Override
+  public void onExitClicked() {
     gameController.resetGame();
     cardLayout.show(mainPanel, "GAME");
     startGameLoop();

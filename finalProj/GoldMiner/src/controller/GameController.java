@@ -25,14 +25,8 @@ public class GameController {
   private List<Item> itemList;
   private Level level;
 
-  private LevelCompleteListener levelCompleteListener;
-  public interface LevelCompleteListener {
-    void onExitToMenu();
-  }
-
-  public void setLevelCompleteListener(LevelCompleteListener levelCompleteListener) {
-    this.levelCompleteListener = levelCompleteListener;
-  }
+  // Flag to indicate level is complete (target reached when time is up)
+  private boolean levelComplete = false;
 
   public GameController() {
     random = new Random();
@@ -112,17 +106,10 @@ public class GameController {
     return gameTimer;
   }
 
-  public void setGameTimer(GameTimer gameTimer) {
-    this.gameTimer = gameTimer;
-  }
-
   public boolean isGameOver() {
     return gameOver;
   }
 
-  public void setGameOver(boolean gameOver) {
-    this.gameOver = gameOver;
-  }
 
   public void update() {
     if(gameOver || gamePaused){
@@ -133,7 +120,7 @@ public class GameController {
     if(gameTimer.isTimeUp()){
       if(level.shouldLevelUp(score.getCurrentScore())){
         gamePaused = true;
-        showLevelCompleteDialog();
+        levelComplete = true;
         return;
       }else{
         gameOver = true;
@@ -150,59 +137,6 @@ public class GameController {
     line.update();
     // 3) Remove gold that is marked as collected or stone that is marked as collected
     removeCollectedItems();
-  }
-
-  private void showLevelCompleteDialog() {
-    SwingUtilities.invokeLater(new Runnable() {
-      public void run() {
-        Object[] options = { "Enter NEXT LEVEL", "Exit GAME" };
-        int option = JOptionPane.showOptionDialog(null,
-            "Congratulations! You have reached the target score.\nWhat would you like to do?",
-            "Level Complete",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE,
-            null,
-            options,
-            options[0]);
-        if(option == JOptionPane.YES_OPTION){
-          gotoNextLevel();
-        }else{
-          if(levelCompleteListener != null){
-            levelCompleteListener.onExitToMenu();
-          }
-        }
-      }
-    });
-  }
-
-
-  public void resetGame() {
-    // Reset the score to 0
-    score.reset();
-    // Reset the level back to initial values
-    level.reset();
-    // Reset the line to its initial state
-    // Reset the game timer to initial time (e.g. 10.0 seconds for a new game)
-    gameTimer.reset(10.0);
-    line.reset();
-    // Clear current items and generate new ones
-    itemList.clear();
-    generateGold(5);
-    generateStone(5);
-    // Unpause game, allowing updates to occur
-    gameOver = false;
-    gamePaused = false;
-  }
-
-  private void gotoNextLevel() {
-    level.levelUp();
-    gameTimer.reset(30.0);
-    itemList.clear();
-    generateGold(6);
-    generateStone(6);
-    line.reset();
-    gameOver = false;
-    gamePaused = false;
   }
 
   private void checkCollision() {
@@ -246,27 +180,6 @@ public class GameController {
       }
     }
   }
-
-  // For the View
-  public List<Gold> getGoldList() {
-    List<Gold> goldList = new ArrayList<>();
-    for (Item item : itemList) {
-      if (item instanceof Gold) {
-        goldList.add((Gold) item);
-      }
-    }
-    return goldList;
-  }
-  public List<Stone> getStoneList() {
-    List<Stone> stoneList = new ArrayList<>();
-    for (Item item : itemList) {
-      if(item instanceof Stone) {
-        stoneList.add((Stone) item);
-      }
-    }
-    return stoneList;
-  }
-
   public Line getLine() {
     return line;
   }
@@ -276,8 +189,12 @@ public class GameController {
     line.startGrabbing();
   }
 
-  public void startRetracting() {
-    line.startRetracting();
+  public boolean isGamePaused() {
+    return gamePaused;
+  }
+
+  public boolean isLevelComplete() {
+    return levelComplete;
   }
 
   public Score getScore() {
@@ -293,7 +210,33 @@ public class GameController {
     return level;
   }
 
-  public boolean isGamePaused() {
-    return gamePaused;
+  public void resetGame() {
+    // Reset the score to 0
+    score.reset();
+    // Reset the level back to initial values
+    level.reset();
+    // Reset the line to its initial state
+    // Reset the game timer to initial time (e.g. 10.0 seconds for a new game)
+    gameTimer.reset(10.0);
+    line.reset();
+    // Clear current items and generate new ones
+    itemList.clear();
+    generateGold(5);
+    generateStone(5);
+    // Unpause game, allowing updates to occur
+    gameOver = false;
+    gamePaused = false;
+  }
+
+  public void gotoNextLevel() {
+    level.levelUp();
+    gameTimer.reset(10.0);
+    itemList.clear();
+    generateGold(6);
+    generateStone(6);
+    line.reset();
+    gameOver = false;
+    gamePaused = false;
+    levelComplete = false;
   }
 }
