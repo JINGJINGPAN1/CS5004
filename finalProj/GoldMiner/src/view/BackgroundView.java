@@ -9,7 +9,6 @@ import utils.ResourceLoader;
  */
 public class BackgroundView {
   private BufferedImage bgImage; // Background image
-  private BufferedImage bgImage1; // Background image 1
   private BufferedImage personImage; // Character image
 
   /**
@@ -17,9 +16,8 @@ public class BackgroundView {
    * Loads the background and character images from resources
    */
   public BackgroundView() {
-    bgImage = ResourceLoader.loadImage("resources/imgs/bg.jpg");
-    bgImage1 = ResourceLoader.loadImage("resources/imgs/bg1.jpg");
-    personImage = ResourceLoader.loadImage("resources/imgs/peo.png");
+    bgImage = ResourceLoader.loadImage("resources/imgs/bg.png");
+    personImage = ResourceLoader.loadImage("resources/imgs/person_resized.png");
   }
 
   /**
@@ -27,11 +25,8 @@ public class BackgroundView {
    * @param g the Graphics object to draw on
    */
   public void draw(Graphics g) {
-    if (bgImage1 != null) {
-      g.drawImage(bgImage1, 0, 0, null);
-    }
     if (bgImage != null) {
-      g.drawImage(bgImage, 0, 200, null);
+      g.drawImage(bgImage, 0, 0, null);
     }
     if (personImage != null) {
       g.drawImage(personImage, 230, 50, null);

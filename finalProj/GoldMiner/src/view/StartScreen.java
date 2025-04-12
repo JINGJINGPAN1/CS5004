@@ -20,10 +20,12 @@ public class StartScreen extends JPanel {
 
   private screenListener listener;
   private BufferedImage background;
+  private JButton startButton;
+  private JButton exitButton;
 
   public StartScreen(screenListener listener) {
     this.listener = listener;
-    background = ResourceLoader.loadImage("resources/imgs/bg4.png");
+    background = ResourceLoader.loadImage("resources/imgs/bg1.png");
     initializeUI();
   }
 
@@ -36,20 +38,15 @@ public class StartScreen extends JPanel {
     buttonPanel.setOpaque(false);
 
     // create Start button
-    JButton startButton = new JButton("Start");
+    startButton = new JButton("Start");
     stylizedButton(startButton);
 
-    // create Help button
-    JButton helpButton = new JButton("Help");
-    stylizedButton(helpButton);
-
     // create Exit button
-    JButton exitButton = new JButton("Exit");
+    exitButton = new JButton("Exit");
     stylizedButton(exitButton);
 
     // 将三个按钮添加到按钮面板中
     buttonPanel.add(startButton);
-    buttonPanel.add(helpButton);
     buttonPanel.add(exitButton);
 
     // 将按钮面板添加到整个页面的底部

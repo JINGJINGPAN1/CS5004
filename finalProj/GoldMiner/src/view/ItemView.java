@@ -22,8 +22,8 @@ public class ItemView {
    */
   public ItemView(List<Item> itemList) {
     this.itemList = itemList;
-    goldImg = ResourceLoader.loadImage("resources/imgs/gold0.gif");
-    stoneImg = ResourceLoader.loadImage("resources/imgs/rock1.png");
+    goldImg = ResourceLoader.loadImage("resources/imgs/gold.png");
+    stoneImg = ResourceLoader.loadImage("resources/imgs/stone.png");
   }
 
   /**

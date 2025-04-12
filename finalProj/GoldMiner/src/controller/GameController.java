@@ -77,8 +77,8 @@ public class GameController {
   private int[] generateNonOverlapPosition(int w, int h) {
     // gameWindow 600 * 800
     int maxX = 600;
-    int minY = 200;
-    int maxY = 800;
+    int minY = 300;
+    int maxY = 750;
 
     int playableHeight = maxY - minY;
 
@@ -177,13 +177,13 @@ public class GameController {
 
 
   public void resetGame() {
-    // Reset the game timer to initial time (e.g. 10.0 seconds for a new game)
-    gameTimer.reset(10.0);
     // Reset the score to 0
     score.reset();
     // Reset the level back to initial values
     level.reset();
     // Reset the line to its initial state
+    // Reset the game timer to initial time (e.g. 10.0 seconds for a new game)
+    gameTimer.reset(10.0);
     line.reset();
     // Clear current items and generate new ones
     itemList.clear();
@@ -191,6 +191,7 @@ public class GameController {
     generateStone(5);
     // Unpause game, allowing updates to occur
     gameOver = false;
+    gamePaused = false;
   }
 
   private void gotoNextLevel() {

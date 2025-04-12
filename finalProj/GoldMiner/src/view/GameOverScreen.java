@@ -25,7 +25,7 @@ public class GameOverScreen extends JPanel {
 
   public GameOverScreen(screenListener listener) {
     this.listener = listener;
-    background = ResourceLoader.loadImage("resources/imgs/bg5.png");
+    background = ResourceLoader.loadImage("resources/imgs/bg2.png");
     // GridBagLayout
     setLayout(new GridBagLayout());
     initializeUI();

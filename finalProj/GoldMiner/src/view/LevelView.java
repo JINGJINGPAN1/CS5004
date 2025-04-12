@@ -13,8 +13,8 @@ public class LevelView {
 
   public void draw(Graphics g) {
     int currentLevel = level.getCurrentLevel();
-    g.setColor(Color.BLUE);
-    g.setFont(new Font("Arial", Font.BOLD, 28));
+    g.setColor(Color.GREEN);
+    g.setFont(new Font("Comic Sans MS", Font.BOLD, 30));
     g.drawString("Level: " + currentLevel, 20, 100);
   }
 
