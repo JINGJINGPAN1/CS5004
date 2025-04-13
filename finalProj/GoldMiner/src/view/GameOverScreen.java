@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
@@ -80,10 +81,10 @@ public class GameOverScreen extends JPanel {
   private void stylizedButton(JButton button) {
     button.setFont(new Font("Comic Sans MS", Font.BOLD, 24));
     button.setForeground(Color.WHITE);
-    button.setBorder(BorderFactory.createLineBorder(Color.GRAY, 3));
+    button.setBorder(BorderFactory.createLineBorder(Color.GRAY, 3, true));
     button.setContentAreaFilled(false);
     button.setOpaque(false);
-    button.setFocusPainted(true);
+    button.setFocusPainted(false);
   }
 
   public void updateScoreAndLevel(Score score, Level level) {

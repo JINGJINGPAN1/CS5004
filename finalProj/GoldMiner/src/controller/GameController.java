@@ -140,19 +140,27 @@ public class GameController {
 
   private void checkCollision() {
     if (line.getLineState() == LineState.SWING || line.getLineState() == LineState.GRAB) {
-      Rectangle hookBounds = line.getHookBounds();
+      int tipX = line.getEndX();
+      int tipY = line.getEndY();
+
       for (Item item : itemList) {
-        if (!item.isCollected()) {
-          Rectangle itemRect = new Rectangle(item.getX(), item.getY(), item.getWidth(), item.getHeight());
-          if (hookBounds.intersects(itemRect)) {
-            System.out.println("Collision detected with an item!");
-            line.setGrabbedItem(item);
-            line.setLineState(LineState.RETRACT);
-            break;  // Only grab one item at a time.
-          }
+        if (!item.isCollected() && isColliding(tipX, tipY, item)) {
+          // We have collision
+          System.out.println("Collision detected with an item!");
+          // Let the line hold this gold
+          line.setGrabbedItem(item);
+          // Switch line to RETRACT immediately
+          line.setLineState(LineState.RETRACT);
+          // Break so we only grab one gold at a time
+          break;
         }
       }
     }
+  }
+
+  private boolean isColliding(int x, int y, Item item) {
+    return x > item.getX() && x < item.getX() + item.getWidth()
+        && y > item.getY() && y < item.getY() + item.getHeight();
   }
 
   private void removeCollectedItems() {

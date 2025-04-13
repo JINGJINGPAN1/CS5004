@@ -10,6 +10,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.image.BufferedImage;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -45,48 +47,48 @@ public class LevelCompleteDialog extends JDialog {
         }
       }
     };
-    backgroundPanel.setLayout(new GridBagLayout());
+    backgroundPanel.setLayout(new BoxLayout(backgroundPanel, BoxLayout.Y_AXIS));
     setContentPane(backgroundPanel);
 
-    //message
-    messageLabel = new JLabel("<html>Congratulations!<br><br>"
-        + "What would you like to do?</html>", SwingConstants.CENTER);
+    // message
+    messageLabel = new JLabel("<html><div style='text-align: center;'>"
+        + "🎉 Congratulations!"
+        + "<br><br><span style='white-space: nowrap;'>What would you like to do?</span></div></html>",
+        SwingConstants.CENTER);
     messageLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
     messageLabel.setForeground(Color.YELLOW);
+    messageLabel.setAlignmentX(CENTER_ALIGNMENT);
+    messageLabel.setBorder(BorderFactory.createEmptyBorder(40, 20, 10, 20)); // top padding
+    backgroundPanel.add(messageLabel);
 
-    GridBagConstraints gbc = new GridBagConstraints();
-    gbc.gridx = 0;
-    gbc.gridy = 0;
-    gbc.weightx = 1.0;
-    gbc.weighty = 0.7;
-    gbc.anchor = GridBagConstraints.CENTER;
-    gbc.fill = GridBagConstraints.NONE;
-    gbc.insets = new Insets(50, 20, 10, 20); // 上边距20，下边距10，左右边距20
-    backgroundPanel.add(messageLabel, gbc);
+    // flexible vertical space
+    backgroundPanel.add(Box.createVerticalGlue());
 
     // buttons
-    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+    JPanel buttonPanel = new JPanel();
     buttonPanel.setOpaque(false);
-    nextButton = new JButton("Next");
+    buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+
+    nextButton = new JButton(" Next Level ");
     stylizedButton(nextButton);
-    quitButton = new JButton("Quit");
-    stylizedButton(quitButton);
+    nextButton.setAlignmentX(CENTER_ALIGNMENT);
     buttonPanel.add(nextButton);
+
+    buttonPanel.add(Box.createVerticalStrut(15)); // spacing
+
+    quitButton = new JButton(" Quit Game ");
+    stylizedButton(quitButton);
+    quitButton.setAlignmentX(CENTER_ALIGNMENT);
     buttonPanel.add(quitButton);
 
-    gbc = new GridBagConstraints();
-    gbc.gridx = 0;
-    gbc.gridy = 1;
-    gbc.weightx = 1.0;
-    gbc.weighty = 0.3;
-    gbc.anchor = GridBagConstraints.PAGE_END;
-    gbc.fill = GridBagConstraints.NONE;
-    gbc.insets = new Insets(10, 20, 20, 20);
-    backgroundPanel.add(buttonPanel, gbc);
+    buttonPanel.setAlignmentX(CENTER_ALIGNMENT);
+    backgroundPanel.add(buttonPanel);
+
+    backgroundPanel.add(Box.createVerticalGlue()); // bottom glue
 
     // click event
     nextButton.addActionListener(e -> {
-      if(listener != null) {
+      if (listener != null) {
         listener.onNextLevelClicked();
       }
       setVisible(false);
@@ -94,7 +96,7 @@ public class LevelCompleteDialog extends JDialog {
     });
 
     quitButton.addActionListener(e -> {
-      if(listener != null) {
+      if (listener != null) {
         listener.onReturnToMenuClicked();
       }
       setVisible(false);
@@ -103,12 +105,12 @@ public class LevelCompleteDialog extends JDialog {
   }
 
   private void stylizedButton(JButton button) {
-    button.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
+    button.setFont(new Font("Comic Sans MS", Font.BOLD, 18));
     button.setForeground(Color.WHITE);
-    button.setBorder(BorderFactory.createLineBorder(Color.GRAY, 3));
+    button.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
     button.setContentAreaFilled(false);
+    button.setFocusPainted(false);
     button.setOpaque(false);
-    button.setFocusPainted(true);
-    button.setPreferredSize(new Dimension(100, 50));
+    button.setPreferredSize(new Dimension(160, 40));
   }
 }
