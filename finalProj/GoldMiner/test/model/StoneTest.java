@@ -22,9 +22,9 @@ class StoneTest {
 
   @Test
   void getScoreValue() {
-    assertEquals(250, stone1.getScoreValue());
-    assertEquals(50, stone2.getScoreValue());
-    assertEquals(100, stone3.getScoreValue());
+    assertEquals(50, stone1.getScoreValue());
+    assertEquals(10, stone2.getScoreValue());
+    assertEquals(20, stone3.getScoreValue());
   }
 
   @Test
