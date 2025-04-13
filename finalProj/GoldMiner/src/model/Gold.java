@@ -7,7 +7,6 @@ public class Gold extends Item {
   public Gold(int x, int y, int width, int height) {
     super(x, y, width, height);
   }
-  //
 
   /**
    * Method to get the score value based on the dimensions of the gold item.
@@ -43,9 +42,12 @@ public class Gold extends Item {
     }
   }
 
-    public int getX() {
-      return x;
-    }
+  /** Getter of x
+   * @return x
+   */
+  public int getX() {
+    return x;
+  }
 
   /**
    * Setter of x

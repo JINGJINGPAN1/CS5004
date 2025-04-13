@@ -2,6 +2,9 @@ package model;
 
 import java.awt.Rectangle;
 
+/**
+ * This class represents a line that can swing, grab items, and retract.
+ */
 public class Line {
   // current start coordinates
   private int startX, startY;
@@ -69,7 +72,7 @@ public class Line {
   }
 
   // Swing behavior: adjust angleFactor based on direction
-  private void swing() {
+  protected void swing() {
     if (angleFactor < MIN_ANGLE) {
       direction = 1;
     } else if (angleFactor > MAX_ANGLE) {
@@ -79,7 +82,7 @@ public class Line {
   }
 
   // Grab behavior: extend the line until reaching maximum length or hitting bounds
-  private void grab() {
+  protected void grab() {
     if (length < MAX_LENGTH) {
       length += DELTA_LENGTH;
       int tipX = getEndX();
@@ -93,7 +96,7 @@ public class Line {
   }
 
   // Retract behavior: shorten the line while moving the grabbed item if exists
-  private void retract() {
+   protected void retract() {
     double retractSpeed = (grabbedItem != null)
         ? grabbedItem.computeRetractSpeed()
         : BASE_RETRACT_SPEED;
