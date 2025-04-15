@@ -23,7 +23,7 @@ public class GameTimer {
   public void update(double elapsedSeconds) {
     if(!timeUp){
       timeLeft -= elapsedSeconds;
-      if(timeLeft <= -0.999999){
+      if (timeLeft <= 0) {
         timeLeft = 0;
         timeUp = true;
       }

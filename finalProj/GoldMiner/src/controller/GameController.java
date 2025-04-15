@@ -216,7 +216,7 @@ public class GameController {
     level.reset();
     // Reset the line to its initial state
     // Reset the game timer to initial time (e.g. 10.0 seconds for a new game)
-    gameTimer.reset(10.0);
+    gameTimer.reset(10.232);
     line.reset();
     // Clear current items and generate new ones
     itemList.clear();
@@ -230,7 +230,7 @@ public class GameController {
 
   public void gotoNextLevel() {
     level.levelUp();
-    gameTimer.reset(10.0);
+    gameTimer.reset(10.232);
     itemList.clear();
     generateGold(6);
     generateStone(6);

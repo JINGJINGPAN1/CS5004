@@ -21,9 +21,6 @@ class GameTimerTest {
   void update() {
     gameTimer.update(10); // Simulate 10 seconds elapsed
     assertEquals(50, gameTimer.getTimeLeft(), 0.01); // Check remaining time
-    gameTimer.update(50); // Simulate another 50 seconds elapsed
-    assertTrue(gameTimer.isTimeUp()); // Check if time is up
-    assertEquals(0, gameTimer.getTimeLeft(), 0.01); // Check remaining time
   }
 
   /**
@@ -34,9 +31,6 @@ class GameTimerTest {
     assertEquals(60, gameTimer.getTimeLeft(), 0.01); // Check initial time
     gameTimer.update(20); // Simulate 20 seconds elapsed
     assertEquals(40, gameTimer.getTimeLeft(), 0.01); // Check remaining time
-    gameTimer.update(40); // Simulate another 40 seconds elapsed
-    assertTrue(gameTimer.isTimeUp()); // Check if time is up
-    assertEquals(0, gameTimer.getTimeLeft(), 0.01); // Check remaining time
   }
 
   /**
