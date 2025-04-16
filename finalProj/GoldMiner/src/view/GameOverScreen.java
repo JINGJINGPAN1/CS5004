@@ -18,11 +18,11 @@ public class GameOverScreen extends JPanel {
   private screenListener listener;
   private BufferedImage background;
 
-  private JLabel scoreLabel;
-  private JLabel levelLabel;
+  protected JLabel scoreLabel;
+  protected JLabel levelLabel;
 
-  private JButton restartButton;
-  private JButton exitButton;
+  protected JButton restartButton;
+  protected JButton exitButton;
 
   public GameOverScreen(screenListener listener) {
     this.listener = listener;
@@ -75,10 +75,14 @@ public class GameOverScreen extends JPanel {
       }
     });
 
-    exitButton.addActionListener(e -> System.exit(0));
+    exitButton.addActionListener(e -> {
+      if (listener != null) {
+        listener.onExitClicked();
+      }
+    });
   }
 
-  private void stylizedButton(JButton button) {
+  protected void stylizedButton(JButton button) {
     button.setFont(new Font("Comic Sans MS", Font.BOLD, 24));
     button.setForeground(Color.WHITE);
     button.setBorder(BorderFactory.createLineBorder(Color.GRAY, 3, true));

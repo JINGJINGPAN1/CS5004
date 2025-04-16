@@ -14,6 +14,13 @@ public class Score {
   }
 
   /**
+   * Getter method to retrieve the current score.
+   */
+  public int getScore() {
+    return currentScore;
+  }
+
+  /**
    * Method to add points to the current score.
    * @param points The number of points to add.
    */
