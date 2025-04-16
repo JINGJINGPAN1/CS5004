@@ -20,8 +20,8 @@ public class StartScreen extends JPanel {
 
   private screenListener listener;
   private BufferedImage background;
-  private JButton startButton;
-  private JButton exitButton;
+  protected JButton startButton;
+  protected JButton exitButton;
 
   public StartScreen(screenListener listener) {
     this.listener = listener;
@@ -51,7 +51,9 @@ public class StartScreen extends JPanel {
 
     // add button panel
     add(buttonPanel, BorderLayout.SOUTH);
+  }
 
+  public void setListeners() {
     // Button click event: call listener's onStartClicked()
     startButton.addActionListener(e -> {
       if (listener != null) {
@@ -60,7 +62,7 @@ public class StartScreen extends JPanel {
     });
 
     // Exit click event
-    exitButton.addActionListener(e -> {System.exit(0);});
+    exitButton.addActionListener(e -> exitApplication());
   }
 
   private void stylizedButton(JButton button) {
@@ -78,5 +80,9 @@ public class StartScreen extends JPanel {
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
     g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
+  }
+
+  protected void exitApplication() {
+    System.exit(0);
   }
 }

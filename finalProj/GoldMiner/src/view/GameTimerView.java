@@ -25,7 +25,6 @@ public class GameTimerView {
    */
   public void draw(Graphics g) {
      double timeLeft = gameTimer.getTimeLeft();
-     System.out.println(timeLeft + " " + Math.ceil(timeLeft) + " " + Math.floor(timeLeft));
      int displayTime = (int) Math.floor(timeLeft);
      g.setColor(Color.RED);
      g.setFont(new Font("Comic Sans MS", Font.BOLD, 25));

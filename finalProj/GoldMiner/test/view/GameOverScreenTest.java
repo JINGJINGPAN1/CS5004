@@ -91,13 +91,13 @@ class GameOverScreenTest {
    */
   @Test
   void paintComponent() {
-    BufferedImage buffer = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
-    Graphics2D graphics = buffer.createGraphics();
+    BufferedImage image = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
+    Graphics graphics = image.createGraphics();
 
     try {
       screen.setSize(800, 600);
       screen.paintComponent(graphics);
-      assertNotNull(buffer.getRGB(0, 0));
+      assertNotNull(image.getRGB(0, 0));
     } finally {
       graphics.dispose();
     }
