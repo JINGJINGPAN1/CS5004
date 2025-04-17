@@ -37,7 +37,7 @@ public class LevelCompleteDialog extends JDialog {
     initializeUI();
   }
 
-  private void initializeUI() {
+  protected void initializeUI() {
     JPanel backgroundPanel = new JPanel() {
       @Override
       protected void paintComponent(Graphics g) {
@@ -104,7 +104,7 @@ public class LevelCompleteDialog extends JDialog {
     });
   }
 
-  private void stylizedButton(JButton button) {
+  protected void stylizedButton(JButton button) {
     button.setFont(new Font("Comic Sans MS", Font.BOLD, 18));
     button.setForeground(Color.WHITE);
     button.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));

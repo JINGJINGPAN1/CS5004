@@ -11,21 +11,21 @@ import java.awt.event.MouseEvent;
 import model.LineState;
 
 public class GameWin extends JFrame implements screenListener {
-  private GameController gameController;
+  protected GameController gameController;
 
   // Views
   private BackgroundView backgroundView;
   private LineView lineView;
   private ItemView itemView;
-  private GamePanel gamePanel;
-  private StartScreen startScreen;      // Changed type to StartScreen
-  private GameOverScreen gameOverScreen;
+  protected GamePanel gamePanel;
+  protected StartScreen startScreen;      // Changed type to StartScreen
+  protected GameOverScreen gameOverScreen;
 
-  private JPanel mainPanel;  // container for different views
-  private CardLayout cardLayout;
+  protected JPanel mainPanel;  // container for different views
+  protected CardLayout cardLayout;
 
   // Use a single timer and keep a reference to it so we can stop it when needed.
-  private Timer gameLoopTimer;
+  protected Timer gameLoopTimer;
 
   public GameWin() {
     // Initialize the controller and views
@@ -85,7 +85,7 @@ public class GameWin extends JFrame implements screenListener {
   /**
    * Starts the game loop timer.
    */
-  private void startGameLoop() {
+  protected void startGameLoop() {
     // Create and assign the timer to a member variable.
     gameLoopTimer = new javax.swing.Timer(16, e -> {
       gameController.update();
