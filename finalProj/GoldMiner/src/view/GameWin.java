@@ -42,6 +42,7 @@ public class GameWin extends JFrame implements screenListener {
     startScreen = new StartScreen(this);
     startScreen.setListeners();
     gameOverScreen = new GameOverScreen(this);
+    gameOverScreen.setListeners();
 
     // Setup CardLayout to switch views.
     cardLayout = new CardLayout();

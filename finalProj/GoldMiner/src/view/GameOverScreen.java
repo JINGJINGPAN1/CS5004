@@ -67,7 +67,9 @@ public class GameOverScreen extends JPanel {
     gbc.gridx = 0;
     gbc.gridy = 3;
     add(exitButton, gbc);
+  }
 
+  protected void setListeners() {
     // click events
     restartButton.addActionListener(e -> {
       if (listener != null) {
@@ -75,11 +77,7 @@ public class GameOverScreen extends JPanel {
       }
     });
 
-    exitButton.addActionListener(e -> {
-      if (listener != null) {
-        listener.onExitClicked();
-      }
-    });
+    exitButton.addActionListener(e -> exitApplication());
   }
 
   protected void stylizedButton(JButton button) {
@@ -100,5 +98,9 @@ public class GameOverScreen extends JPanel {
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
     g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
+  }
+
+  protected void exitApplication() {
+    System.exit(0);
   }
 }

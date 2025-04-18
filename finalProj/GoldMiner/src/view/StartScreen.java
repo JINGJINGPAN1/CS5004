@@ -53,7 +53,7 @@ public class StartScreen extends JPanel {
     add(buttonPanel, BorderLayout.SOUTH);
   }
 
-  public void setListeners() {
+  protected void setListeners() {
     // Button click event: call listener's onStartClicked()
     startButton.addActionListener(e -> {
       if (listener != null) {

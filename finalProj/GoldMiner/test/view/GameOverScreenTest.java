@@ -7,9 +7,11 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -38,7 +40,9 @@ class GameOverScreenTest {
   @BeforeEach
   void setUp() {
     mockListener = mock(screenListener.class);
-    screen = new GameOverScreen(mockListener);
+    screen = spy(new GameOverScreen(mockListener));
+    doNothing().when(screen).exitApplication();
+    screen.setListeners();
     mockScore = mock(Score.class);
     mockLevel = mock(Level.class);
     mockLoader = mock(ResourceLoader.class);
@@ -61,7 +65,7 @@ class GameOverScreenTest {
     verify(mockListener).onStartClicked();
 
     screen.exitButton.doClick();
-    verify(mockListener).onExitClicked();
+    verify(screen).exitApplication();
   }
 
   /**
