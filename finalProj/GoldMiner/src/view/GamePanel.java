@@ -78,7 +78,5 @@ public class GamePanel extends JPanel {
     itemView.setItemList(gameController.getItemList());
 
     itemView.draw(g);
-
-
   }
 }

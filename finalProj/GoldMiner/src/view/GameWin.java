@@ -5,30 +5,58 @@ import java.awt.CardLayout;
 import java.util.List;
 import model.Item;
 import model.Line;
+import model.LineState;
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import model.LineState;
 
+/**
+ * The {@code GameWin} class is the main window for the Gold Miner game.
+ * <p>
+ * It manages the different screens using a {@link CardLayout}, such as:
+ * - Start Screen
+ * - Game Panel (main gameplay)
+ * - Game Over Screen
+ * </p>
+ * It also handles user interactions and drives the game loop using a Swing Timer.
+ */
 public class GameWin extends JFrame implements screenListener {
+
+  /** The controller that manages game logic and state. */
   protected GameController gameController;
 
-  // Views
+  /** View for the background image of the game. */
   private BackgroundView backgroundView;
+
+  /** View for rendering the swinging line. */
   private LineView lineView;
+
+  /** View for rendering collectible items. */
   private ItemView itemView;
+
+  /** Main gameplay panel that contains all active components. */
   protected GamePanel gamePanel;
-  protected StartScreen startScreen;      // Changed type to StartScreen
+
+  /** The initial start screen with the Start button. */
+  protected StartScreen startScreen;
+
+  /** The screen displayed when the game is over. */
   protected GameOverScreen gameOverScreen;
 
-  protected JPanel mainPanel;  // container for different views
+  /** The main container panel that holds and switches between views. */
+  protected JPanel mainPanel;
+
+  /** The layout manager used to switch between views. */
   protected CardLayout cardLayout;
 
-  // Use a single timer and keep a reference to it so we can stop it when needed.
+  /** The game loop timer that drives updates and checks game state. */
   protected Timer gameLoopTimer;
 
+  /**
+   * Constructs the main game window, initializes views and sets up listeners.
+   */
   public GameWin() {
-    // Initialize the controller and views
+    // Controller and view initialization
     gameController = new GameController();
     backgroundView = new BackgroundView();
     Line line = gameController.getLine();
@@ -37,14 +65,13 @@ public class GameWin extends JFrame implements screenListener {
     itemView = new ItemView(itemList);
     gamePanel = new GamePanel(gameController, backgroundView, lineView, itemView);
 
-    // Initialize StartScreen and GameOverScreen with listeners.
-    // 'this' is passed as the listener because GameWin now implements StartScreenListener.
+    // Screens with listener registration
     startScreen = new StartScreen(this);
     startScreen.setListeners();
     gameOverScreen = new GameOverScreen(this);
     gameOverScreen.setListeners();
 
-    // Setup CardLayout to switch views.
+    // Setup CardLayout
     cardLayout = new CardLayout();
     mainPanel = new JPanel(cardLayout);
     mainPanel.add(startScreen, "START");
@@ -53,14 +80,13 @@ public class GameWin extends JFrame implements screenListener {
 
     add(mainPanel);
 
-    // Set mouse listener on gamePanel for game actions.
+    // Mouse listener to trigger line grab
     gamePanel.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent e) {
-        // Only allow grabbing if the line is in SWING or GRAB state.
         if (e.getButton() == MouseEvent.BUTTON1) {
-          if (gameController.getLine().getLineState() == LineState.GRAB ||
-              gameController.getLine().getLineState() == LineState.SWING) {
+          Line currentLine = gameController.getLine();
+          if (currentLine.getLineState() == LineState.GRAB || currentLine.getLineState() == LineState.SWING) {
             gameController.startGrabbing();
           } else {
             System.out.println("Cannot grab now, line is retracting.");
@@ -71,35 +97,32 @@ public class GameWin extends JFrame implements screenListener {
   }
 
   /**
-   * This method is called when the user clicks the "Start" button on the start screen.
+   * Triggered when the user clicks the "Start" button.
+   * Resets game state and switches to the game panel.
    */
   @Override
   public void onStartClicked() {
-    // Reset the game state every time Start is clicked.
     gameController.resetGame();
-    // Show the game panel.
     cardLayout.show(mainPanel, "GAME");
-    // Start the game loop.
     startGameLoop();
   }
 
   /**
-   * Starts the game loop timer.
+   * Starts the main game loop using a Swing {@link Timer}.
+   * This timer updates the game state every ~16 milliseconds (60 FPS).
    */
   protected void startGameLoop() {
-    // Create and assign the timer to a member variable.
     gameLoopTimer = new javax.swing.Timer(16, e -> {
       gameController.update();
 
-      if(gameController.isLevelComplete()){
+      // Show level complete dialog
+      if (gameController.isLevelComplete()) {
         gameLoopTimer.stop();
-
-        // display popup to next level or not
         LevelCompleteDialog dialog = new LevelCompleteDialog(this, this);
         dialog.setVisible(true);
       }
 
-      // When game over is detected, stop the timer and switch to GameOverScreen.
+      // Handle game over
       if (gameController.isGameOver()) {
         gameLoopTimer.stop();
         Timer delayTimer = new Timer(1000, ev -> {
@@ -109,26 +132,36 @@ public class GameWin extends JFrame implements screenListener {
         delayTimer.setRepeats(false);
         delayTimer.start();
       }
+
       repaint();
     });
     gameLoopTimer.start();
   }
 
+  /**
+   * Triggered when the user clicks "Restart" on the game over screen.
+   * Resets game state and starts the loop again.
+   */
   @Override
   public void onRestartClicked() {
-    // Restart the game: reset game state and switch to game panel.
     gameController.resetGame();
     cardLayout.show(mainPanel, "GAME");
-    // Restart the game loop timer.
     startGameLoop();
   }
 
+  /**
+   * Triggered when the user clicks "Return to Menu" from any screen.
+   * Switches to the start screen.
+   */
   @Override
   public void onReturnToMenuClicked() {
-    // Return to the start screen.
     cardLayout.show(mainPanel, "START");
   }
 
+  /**
+   * Triggered when the user completes a level and clicks "Next Level".
+   * Loads the next level and starts the game loop.
+   */
   @Override
   public void onNextLevelClicked() {
     gameController.gotoNextLevel();
@@ -136,6 +169,10 @@ public class GameWin extends JFrame implements screenListener {
     startGameLoop();
   }
 
+  /**
+   * Triggered when the user clicks "Exit" on the game over screen.
+   * Resets the game and restarts it.
+   */
   @Override
   public void onExitClicked() {
     gameController.resetGame();
@@ -143,6 +180,10 @@ public class GameWin extends JFrame implements screenListener {
     startGameLoop();
   }
 
+  /**
+   * Launches the game window with title, size, and visibility.
+   * This method should be called from your {@code main()} method.
+   */
   public void launch() {
     setTitle("Gold Miner");
     setSize(600, 800);
@@ -151,7 +192,6 @@ public class GameWin extends JFrame implements screenListener {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setVisible(true);
 
-    // Initially show the start screen.
     cardLayout.show(mainPanel, "START");
   }
 }

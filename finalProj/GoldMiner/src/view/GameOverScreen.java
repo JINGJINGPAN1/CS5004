@@ -13,32 +13,51 @@ import model.Score;
 import model.Level;
 import utils.ResourceLoader;
 
+/**
+ * The {@code GameOverScreen} class represents the screen shown when the game ends.
+ * It displays the player's score and level and provides options to restart or exit.
+ */
 public class GameOverScreen extends JPanel {
 
+  /** Listener for screen actions like restart or exit. */
   private screenListener listener;
+
+  /** Background image for the game over screen. */
   private BufferedImage background;
 
+  /** Label displaying the final score. */
   protected JLabel scoreLabel;
+
+  /** Label displaying the final level. */
   protected JLabel levelLabel;
 
+  /** Button to restart the game. */
   protected JButton restartButton;
+
+  /** Button to exit the game. */
   protected JButton exitButton;
 
+  /**
+   * Constructs the game over screen and initializes the UI components.
+   *
+   * @param listener A {@link screenListener} for handling restart or exit events.
+   */
   public GameOverScreen(screenListener listener) {
     this.listener = listener;
     background = ResourceLoader.loadImage("resources/imgs/bg2.png");
-    // GridBagLayout
     setLayout(new GridBagLayout());
     initializeUI();
   }
 
+  /**
+   * Initializes the layout, styling, and components on the screen.
+   */
   private void initializeUI() {
     GridBagConstraints gbc = new GridBagConstraints();
-    // gap
     gbc.insets = new Insets(10, 10, 10, 10);
-    gbc.fill = GridBagConstraints.HORIZONTAL; // horizontally fill
+    gbc.fill = GridBagConstraints.HORIZONTAL;
 
-    // scoreLabel
+    // Score label
     scoreLabel = new JLabel("Score: 0");
     scoreLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 24));
     scoreLabel.setForeground(Color.WHITE);
@@ -46,7 +65,7 @@ public class GameOverScreen extends JPanel {
     gbc.gridy = 0;
     add(scoreLabel, gbc);
 
-    // levelLabel
+    // Level label
     levelLabel = new JLabel("Level: 0");
     levelLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 24));
     levelLabel.setForeground(Color.WHITE);
@@ -69,8 +88,11 @@ public class GameOverScreen extends JPanel {
     add(exitButton, gbc);
   }
 
+  /**
+   * Sets the action listeners for the restart and exit buttons.
+   * The restart triggers {@code onStartClicked()}, and exit closes the application.
+   */
   protected void setListeners() {
-    // click events
     restartButton.addActionListener(e -> {
       if (listener != null) {
         listener.onStartClicked();
@@ -80,6 +102,11 @@ public class GameOverScreen extends JPanel {
     exitButton.addActionListener(e -> exitApplication());
   }
 
+  /**
+   * Applies custom styling to buttons for a consistent look.
+   *
+   * @param button The {@link JButton} to be styled.
+   */
   protected void stylizedButton(JButton button) {
     button.setFont(new Font("Comic Sans MS", Font.BOLD, 24));
     button.setForeground(Color.WHITE);
@@ -89,17 +116,31 @@ public class GameOverScreen extends JPanel {
     button.setFocusPainted(false);
   }
 
+  /**
+   * Updates the score and level labels on the game over screen.
+   *
+   * @param score The {@link Score} object holding the current score.
+   * @param level The {@link Level} object holding the current level.
+   */
   public void updateScoreAndLevel(Score score, Level level) {
     scoreLabel.setText("Score: " + score.getCurrentScore());
     levelLabel.setText("Level: " + level.getCurrentLevel());
   }
 
+  /**
+   * Draws the background image for the panel.
+   *
+   * @param g The {@link Graphics} context used for painting.
+   */
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
     g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
   }
 
+  /**
+   * Exits the application when the exit button is clicked.
+   */
   protected void exitApplication() {
     System.exit(0);
   }
