@@ -7,9 +7,15 @@ import model.Gold;
 import model.Item;
 import model.Line;
 import model.LineState;
+import model.Stone;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Test class for GameController.
+ * This class contains unit tests for the GameController class,
+ * ensuring that the game logic and item generation work as expected.
+ */
 class GameControllerTest {
   GameController gameController;
 
@@ -18,25 +24,50 @@ class GameControllerTest {
     gameController = new GameController();
   }
 
+  /**
+   * Test the generation of gold items.
+   */
   @Test
   void generateGold() {
+    List<Item> itemList = gameController.getItemList();
+    itemList.clear();
+    gameController.generateGold(5);
+    long goldCount = itemList.stream().filter(item -> item instanceof Gold).count();
+    assertEquals(5, goldCount, "Should generate exactly 5 gold items");
   }
 
+  /**
+   * Test the generation of stone items.
+   */
   @Test
   void generateStone() {
+    List<Item> itemList = gameController.getItemList();
+    itemList.clear();
+    gameController.generateStone(3);
+    long stoneCount = itemList.stream().filter(item -> item instanceof Stone).count();
+    assertEquals(3, stoneCount, "Should generate exactly 3 stone items");
   }
 
+  /**
+   * Test the getGameTimer method.
+   */
   @Test
   void getGameTimer() {
     assertNotNull(gameController.getGameTimer());
     assertEquals(10.0, gameController.getGameTimer().getTimeLeft(), 0.1);
   }
 
+  /**
+   * Test the isGameOver method.
+   */
   @Test
   void isGameOver() {
     assertFalse(gameController.isGameOver());
   }
 
+  /**
+   * Test the update method when the game is paused or over.
+   */
   @Test
   void updateGamePausedOrOver() {
     gameController.getGameTimer().reset(10);
@@ -54,6 +85,9 @@ class GameControllerTest {
     assertTrue(gameController.isGameOver());
   }
 
+  /**
+   * Test the update method when the game completes a level.
+   */
   @Test
   void updateLevelComplete() {
     gameController.getScore().addPoints(gameController.getLevel().getTargetScore());
@@ -63,6 +97,9 @@ class GameControllerTest {
     assertTrue(gameController.isGamePaused());
   }
 
+  /**
+   * Test the update method when the game has a collision.
+   */
   @Test
   void updateCollisionDetection() {
     Line line = gameController.getLine();
@@ -82,6 +119,9 @@ class GameControllerTest {
     assertEquals(gold, line.getGrabbedItem());
   }
 
+  /**
+   * Test the update method when the game removes a grabbed item.
+   */
   @Test
   void updateRemoveGrabbedItem() {
     List<Item> items = gameController.getItemList();
@@ -93,33 +133,51 @@ class GameControllerTest {
     assertTrue(gameController.getScore().getCurrentScore() > scoreBefore);
   }
 
+  /**
+   * Test the getter for the line object.
+   */
   @Test
   void getLine() {
     assertNotNull(gameController.getLine());
   }
 
+  /**
+   * Test the startGrabbing method.
+   */
   @Test
   void startGrabbing() {
     gameController.startGrabbing();
     assertEquals(LineState.GRAB, gameController.getLine().getLineState());
   }
 
+  /**
+   * Test the isGamePaused method.
+   */
   @Test
   void isGamePaused() {
     assertFalse(gameController.isGamePaused());
   }
 
+  /**
+   * Test the isLevelComplete method.
+   */
   @Test
   void isLevelComplete() {
     assertFalse(gameController.isLevelComplete());
   }
 
+  /**
+   * Test the getter for the score object.
+   */
   @Test
   void getScore() {
     assertNotNull(gameController.getScore());
     assertEquals(0, gameController.getScore().getCurrentScore());
   }
 
+  /**
+   * Test the getter for the item list.
+   */
   @Test
   void getItemList() {
     assertEquals(10, gameController.getItemList().size());
@@ -128,12 +186,18 @@ class GameControllerTest {
     }
   }
 
+  /**
+   * Test the getter for the level object.
+   */
   @Test
   void getLevel() {
     assertNotNull(gameController.getLevel());
     assertEquals(1, gameController.getLevel().getCurrentLevel());
   }
 
+  /**
+   * Test the resetGame method.
+   */
   @Test
   void resetGame() {
     gameController.getScore().addPoints(100);
@@ -152,6 +216,9 @@ class GameControllerTest {
     assertEquals(LineState.SWING, gameController.getLine().getLineState());
   }
 
+  /**
+   * Test the gotoNextLevel method.
+   */
   @Test
   void gotoNextLevel() {
     int initialLevel = gameController.getLevel().getCurrentLevel();

@@ -20,6 +20,9 @@ class StoneTest {
     stone3 = new Stone(0, 0, 50, 50);
   }
 
+  /**
+   * Test the getter of the score value.
+   */
   @Test
   void getScoreValue() {
     assertEquals(50, stone1.getScoreValue());
@@ -27,6 +30,9 @@ class StoneTest {
     assertEquals(20, stone3.getScoreValue());
   }
 
+  /**
+   * Test the retract speed calculation of the stone.
+   */
   @Test
   void computeRetractSpeed() {
     assertEquals(0.5, stone1.computeRetractSpeed());

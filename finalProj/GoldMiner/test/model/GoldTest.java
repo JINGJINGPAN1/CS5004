@@ -5,6 +5,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Test class for the Gold class.
+ * This class tests the functionality of the Gold class, including
+ * score value calculation and retract speed computation.
+ */
 class GoldTest {
   Gold gold1;
   Gold gold2;
@@ -17,6 +22,9 @@ class GoldTest {
     gold3 = new Gold(0, 0, 50, 50);
   }
 
+  /**
+   * Test the getter of the score value.
+   */
   @Test
   void getScoreValue() {
     assertEquals(250, gold1.getScoreValue());
@@ -24,6 +32,9 @@ class GoldTest {
     assertEquals(100, gold3.getScoreValue());
   }
 
+  /**
+   * Test the retract speed calculation of the Gold object.
+   */
   @Test
   void computeRetractSpeed() {
     assertEquals(3.5, gold1.computeRetractSpeed());

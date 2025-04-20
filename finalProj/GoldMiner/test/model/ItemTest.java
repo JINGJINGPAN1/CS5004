@@ -19,30 +19,45 @@ class ItemTest {
     stone = new Stone(1, 2, 10, 20);
   }
 
+  /**
+   * Test the getter of the x coordinate.
+   */
   @Test
   void getX() {
     assertEquals(0, gold.getX());
     assertEquals(1, stone.getX());
   }
 
+  /**
+   * Test the getter of the y coordinate.
+   */
   @Test
   void getY() {
     assertEquals(0, gold.getY());
     assertEquals(2, stone.getY());
   }
 
+  /**
+   * Test the getter of the width.
+   */
   @Test
   void getWidth() {
     assertEquals(10, gold.getWidth());
     assertEquals(10, stone.getWidth());
   }
 
+  /**
+   * Test the getter of the height.
+   */
   @Test
   void getHeight() {
     assertEquals(10, gold.getHeight());
     assertEquals(20, stone.getHeight());
   }
 
+  /**
+   * Test the setter of the x coordinate.
+   */
   @Test
   void setX() {
     gold.setX(5);
@@ -51,6 +66,9 @@ class ItemTest {
     assertEquals(3, stone.getX());
   }
 
+  /**
+   * Test the setter of the y coordinate.
+   */
   @Test
   void setY() {
     gold.setY(5);
@@ -59,6 +77,9 @@ class ItemTest {
     assertEquals(3, stone.getY());
   }
 
+  /**
+   * Test the setter of the width.
+   */
   @Test
   void setWidth() {
     gold.setWidth(15);
@@ -67,6 +88,9 @@ class ItemTest {
     assertEquals(20, stone.getWidth());
   }
 
+  /**
+   * Test the setter of the height.
+   */
   @Test
   void setHeight() {
     gold.setHeight(15);
@@ -75,6 +99,9 @@ class ItemTest {
     assertEquals(25, stone.getHeight());
   }
 
+  /**
+   * Test the collected status of the items.
+   */
   @Test
   void isCollected() {
     assertFalse(gold.isCollected());
@@ -87,6 +114,9 @@ class ItemTest {
     assertTrue(stone.isCollected());
   }
 
+  /**
+   * Test the setter of the collected status.
+   */
   @Test
   void setCollected() {
     gold.setCollected(true);
