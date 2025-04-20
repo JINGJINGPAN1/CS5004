@@ -2,9 +2,6 @@ package view;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.doNothing;
@@ -13,16 +10,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import model.Level;
 import model.Score;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
 import utils.ResourceLoader;
 
 /**
@@ -30,7 +24,7 @@ import utils.ResourceLoader;
  * This class contains unit tests for the GameOverScreen class.
  */
 class GameOverScreenTest {
-  screenListener mockListener; // Mocked screenListener
+  ScreenListener mockListener; // Mocked screenListener
   GameOverScreen screen; // Instance of GameOverScreen to be tested
   Score mockScore; // Mocked Score object
   Level mockLevel; // Mocked Level object
@@ -39,7 +33,7 @@ class GameOverScreenTest {
 
   @BeforeEach
   void setUp() {
-    mockListener = mock(screenListener.class);
+    mockListener = mock(ScreenListener.class);
     screen = spy(new GameOverScreen(mockListener));
     doNothing().when(screen).exitApplication();
     screen.setListeners();

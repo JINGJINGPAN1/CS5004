@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
@@ -20,7 +19,7 @@ import utils.ResourceLoader;
 public class GameOverScreen extends JPanel {
 
   /** Listener for screen actions like restart or exit. */
-  private screenListener listener;
+  private ScreenListener listener;
 
   /** Background image for the game over screen. */
   private BufferedImage background;
@@ -40,9 +39,9 @@ public class GameOverScreen extends JPanel {
   /**
    * Constructs the game over screen and initializes the UI components.
    *
-   * @param listener A {@link screenListener} for handling restart or exit events.
+   * @param listener A {@link ScreenListener} for handling restart or exit events.
    */
-  public GameOverScreen(screenListener listener) {
+  public GameOverScreen(ScreenListener listener) {
     this.listener = listener;
     background = ResourceLoader.loadImage("resources/imgs/bg2.png");
     setLayout(new GridBagLayout());

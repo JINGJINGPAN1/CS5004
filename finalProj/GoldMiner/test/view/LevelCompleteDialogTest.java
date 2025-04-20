@@ -19,13 +19,13 @@ import utils.ResourceLoader;
  * Test class for LevelCompleteDialog.
  */
 class LevelCompleteDialogTest {
-  screenListener mockListener;
+  ScreenListener mockListener;
   LevelCompleteDialog dialog;
   BufferedImage mockImage;
 
   @BeforeEach
   void setUp() {
-    mockListener = mock(screenListener.class);
+    mockListener = mock(ScreenListener.class);
     mockImage = mock(BufferedImage.class);
 
     try(MockedStatic<ResourceLoader> mockedLoader = mockStatic(ResourceLoader.class)) {

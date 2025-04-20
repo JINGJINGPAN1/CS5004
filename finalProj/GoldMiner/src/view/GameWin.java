@@ -20,7 +20,7 @@ import java.awt.event.MouseEvent;
  * </p>
  * It also handles user interactions and drives the game loop using a Swing Timer.
  */
-public class GameWin extends JFrame implements screenListener {
+public class GameWin extends JFrame implements ScreenListener {
 
   /** The controller that manages game logic and state. */
   protected GameController gameController;

@@ -17,14 +17,14 @@ import utils.ResourceLoader;
  * <p>
  * It shows a background image along with two buttons:
  * <ul>
- *   <li>"Start" — triggers the game to begin via {@link screenListener#onStartClicked()}</li>
+ *   <li>"Start" — triggers the game to begin via {@link ScreenListener#onStartClicked()}</li>
  *   <li>"Exit" — closes the application</li>
  * </ul>
  */
 public class StartScreen extends JPanel {
 
   /** Listener for screen-related actions. */
-  private screenListener listener;
+  private ScreenListener listener;
 
   /** Background image for the start screen. */
   private BufferedImage background;
@@ -38,9 +38,9 @@ public class StartScreen extends JPanel {
   /**
    * Constructs the start screen and initializes its UI.
    *
-   * @param listener A {@link screenListener} to notify when buttons are clicked.
+   * @param listener A {@link ScreenListener} to notify when buttons are clicked.
    */
-  public StartScreen(screenListener listener) {
+  public StartScreen(ScreenListener listener) {
     this.listener = listener;
     background = ResourceLoader.loadImage("resources/imgs/bg1.png");
     initializeUI();

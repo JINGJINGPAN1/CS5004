@@ -5,7 +5,7 @@ package view;
  * for handling user interactions across different screens in the game,
  * such as the start screen, game over screen, and level complete dialog.
  */
-public interface screenListener {
+public interface ScreenListener {
 
   /**
    * Called when the user clicks the "Start" button to begin the game.

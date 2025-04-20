@@ -10,7 +10,6 @@ import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import org.junit.jupiter.api.AfterEach;
@@ -23,14 +22,14 @@ import utils.ResourceLoader;
  * Test class for StartScreen.
  */
 class StartScreenTest {
-  screenListener mockListener;
+  ScreenListener mockListener;
   StartScreen startScreen;
   BufferedImage mockBackground;
   MockedStatic<ResourceLoader> mockedLoader;
 
   @BeforeEach
   void setUp() {
-    mockListener = mock(screenListener.class);
+    mockListener = mock(ScreenListener.class);
     mockBackground = mock(BufferedImage.class);
     mockedLoader = mockStatic(ResourceLoader.class);
     mockedLoader.when(() -> ResourceLoader.loadImage("resources/imgs/test.png"))

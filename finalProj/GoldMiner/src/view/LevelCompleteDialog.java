@@ -33,15 +33,15 @@ public class LevelCompleteDialog extends JDialog {
   private JLabel messageLabel;
 
   /** Listener to handle screen navigation actions. */
-  private screenListener listener;
+  private ScreenListener listener;
 
   /**
    * Constructs the LevelCompleteDialog with custom UI elements and action handlers.
    *
    * @param frame    The parent frame that owns this dialog.
-   * @param listener A {@link screenListener} to handle user choices.
+   * @param listener A {@link ScreenListener} to handle user choices.
    */
-  public LevelCompleteDialog(JFrame frame, screenListener listener) {
+  public LevelCompleteDialog(JFrame frame, ScreenListener listener) {
     super(frame, "Level Complete", true);
     this.listener = listener;
     displayImage = ResourceLoader.loadImage("resources/imgs/display.png");
